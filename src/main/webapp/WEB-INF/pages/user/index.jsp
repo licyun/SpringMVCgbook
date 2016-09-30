@@ -10,21 +10,13 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
-    <form:form modelAttribute="user" method="post">
-        <div>
-            <label>邮箱</label>
-            <form:input path="email"/>
-            <form:errors path="email"/>
-        </div>
-        <div>
-            <label>密码</label>
-            <form:input path="passwd"/>
-            <form:errors path="passwd"/>
-        </div>
-        <div>
-            <input type="submit" value="登录"/>
-        </div>
-
-    </form:form>
+<h1>用户管理界面</h1>
+<div>
+        <p>用户id：${user.id}</p>
+        <p>用户名：${user.name} </p>
+        <p>用户邮箱：${user.email} </p>
+        <p>用户密码：${user.passwd} </p>
+        <p><a href="/user/edit-${user.id}">修改个人信息</a></p>
+</div>
 </body>
 </html>

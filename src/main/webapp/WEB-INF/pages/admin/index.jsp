@@ -1,5 +1,6 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,10 +9,9 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/admin_main.css'/>">
 </head>
 <body>
-<header>
+<c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
 <h1>管理员界面</h1>
 <div>
-    <p><a href="/admin/add">增加用户</a></p>
     <table border="1">
         <thead>
             <td>用户头像</td>

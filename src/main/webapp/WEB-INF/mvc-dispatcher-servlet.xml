@@ -12,7 +12,7 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- scan the package and the sub package -->
-    <context:component-scan base-package="com.licyun"/>
+    <context:component-scan base-package="com.licyun.controller"/>
 
     <!-- 配置json -->
     <mvc:annotation-driven />

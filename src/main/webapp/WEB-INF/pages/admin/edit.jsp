@@ -3,16 +3,18 @@
   Date: 2016/9/29
   Time: 14:23
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>修改用户</title>
+    <title>编辑用户</title>
+    <link type="text/css" rel="stylesheet" href="<c:url value='/static/admin_main.css'/>">
 </head>
 <body>
+<c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
 <h1>修改用户</h1>
 <div>
     <form:form modelAttribute="user" method="post">
