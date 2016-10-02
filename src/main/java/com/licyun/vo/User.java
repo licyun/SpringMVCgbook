@@ -1,7 +1,8 @@
-package com.licyun.model;
+package com.licyun.vo;
 
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
@@ -14,32 +15,13 @@ import javax.validation.constraints.Size;
  * Description:
  * 2016/9/27.
  */
-@Entity
-@Table(name="USER")
+@Component
 public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
-
-    @NotNull
-    @Digits(integer=8, fraction=0)
-    @Column(name = "TYPE", nullable = false)
     protected int type;
-
-    @NotEmpty
-    @Column(name = "NAME", nullable = false)
     private String name;
-
-    @NotEmpty
-    @Column(name = "EMAIL", nullable = false)
     private String email;
-
-    @NotEmpty
-    @Column(name = "PASSWD", nullable = false)
     private String passwd;
-
-    @Column(name = "IMGURL", nullable = true)
     private String imgUrl;
 
     public User(){}

@@ -1,6 +1,6 @@
 package com.licyun.util;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import com.licyun.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

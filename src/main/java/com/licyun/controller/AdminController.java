@@ -1,12 +1,13 @@
 package com.licyun.controller;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import com.licyun.service.UserService;
 import com.licyun.util.AdminLoginValid;
 import com.licyun.util.LoginValid;
 import com.licyun.util.RegistValid;
 import com.licyun.util.UpdateValid;
 import org.jboss.logging.annotations.ValidIdRange;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,7 +31,11 @@ public class AdminController {
     private RegistValid registValid;
     private UpdateValid updateValid;
     private AdminLoginValid adminLoginValid;
-    private User user;
+
+    @Value("#{configProperties['hibernate.dialect']}")
+    private String dialect;
+
+
 
     //管理员首页
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
@@ -56,7 +61,6 @@ public class AdminController {
     @RequestMapping(value = "/admin/login",method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
-
         //验证
         userService = new UserService();
         adminLoginValid = new AdminLoginValid();

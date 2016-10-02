@@ -1,6 +1,6 @@
 package com.licyun.controller;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import com.licyun.service.UserService;
 import com.licyun.util.LoginValid;
 import com.licyun.util.RegistValid;

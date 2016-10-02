@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- scan the package and the sub package -->
+    <context:component-scan base-package="com.licyun"/>
+
+    <!-- 总拦截器 -->
+    <mvc:annotation-driven />
+
+    <!--对静态资源文件的访问-->
+    <mvc:resources mapping="/static/**" location="/WEB-INF/static/" />
+
+    <!-- 返回逻辑视图 -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 前缀 -->
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <!-- 后缀 -->
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+     <!--配置国际化资源文件  value值为属性名-->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:database.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>message</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 登录拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 管理员登录拦截 -->
+            <mvc:mapping path="/admin"/>
+            <mvc:mapping path="/admin/*"/>
+            <mvc:exclude-mapping path="/admin/login"/>
+            <bean class="com.licyun.interceptor.AdminInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 用户登录拦截 -->
+            <mvc:mapping path="/user"/>
+            <mvc:mapping path="/user/*"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <bean class="com.licyun.interceptor.UserInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

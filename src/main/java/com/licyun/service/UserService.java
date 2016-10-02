@@ -1,6 +1,6 @@
 package com.licyun.service;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

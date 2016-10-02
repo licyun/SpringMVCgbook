@@ -1,6 +1,6 @@
 package com.licyun.util;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import com.licyun.service.UserService;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.stereotype.Component;
@@ -27,17 +27,17 @@ public class AdminLoginValid implements Validator {
         ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");
         if(userService.isUserEmailExist(user.getEmail())){
             if(userService.findByEmail(user.getEmail()).getPasswd().equals(user.getPasswd())){
+                //判断是否为管理员
+                if(userService.findByEmail(user.getEmail()).getType() == 1){
 
+                }else{
+                    errors.rejectValue("email", "useremail.notexist");
+                }
             }else{
                 errors.rejectValue("passwd", "userpasswd.error");
             }
         }else{
             errors.rejectValue("email", "useremail.notexist");
         }
-        //判断是否为管理员
-        if(userService.findByEmail(user.getEmail()).getType() != 1){
-            errors.rejectValue("email", "useremail.notexist");
-        }
     }
-
 }

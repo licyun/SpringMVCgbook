@@ -1,13 +1,12 @@
 package com.licyun.util;
 
-import com.licyun.model.User;
+import com.licyun.vo.User;
 import com.licyun.service.UserService;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
