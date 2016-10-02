@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class User {
 
     private Long id;
+    private int type;
     private String name;
     private String email;
     private String passwd;
@@ -18,12 +19,27 @@ public class User {
 
     public User(){}
 
-    public User(Long id, String name, String email, String passwd, String imgUrl){
+    public User(Long id, String name, String email, String passwd){
         this.name = name;
         this.id = id;
         this.email = email;
         this.passwd = passwd;
-        this.imgUrl = imgUrl;
+    }
+
+    public User(Long id, String name, String email, String passwd, int type){
+        this.name = name;
+        this.id = id;
+        this.email = email;
+        this.passwd = passwd;
+        this.type = type;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getName() {

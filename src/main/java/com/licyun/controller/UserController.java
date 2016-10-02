@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -33,9 +35,16 @@ public class UserController {
 
     //用户首页
     @RequestMapping(value = {"/user"}, method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String gbook(){
+    public String userIndex(){
         return "/user/index";
     }
+
+    //用户评论
+    @RequestMapping(value = "/user/message", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String message(){
+        return "/user/message";
+    }
+
 
     //注册
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.GET, RequestMethod.HEAD})
@@ -57,21 +66,37 @@ public class UserController {
 
     //登录
     @RequestMapping(value = "/user/login", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String login(Model model){
+    public String login(Model model, HttpSession session){
+        userService = new UserService();
+        //判断session
+        String userSession = (String)session.getAttribute("user");
+        if(userSession != null){
+            model.addAttribute("user", userService.findByEmail(userSession));
+            return "user/index";
+        }
         model.addAttribute("user", new User());
         return "user/login";
     }
-    @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.HEAD})
+    @RequestMapping(value = "/user/login", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
-        loginValid = new LoginValid();
         userService = new UserService();
+        //验证
+        loginValid = new LoginValid();
         loginValid.validate(user, result);
         if(result.hasErrors()){
             return "user/login";
         }
+        session.setAttribute("user", user.getEmail());
         model.addAttribute("user", userService.findByEmail(user.getEmail()));
         return "user/index";
+    }
+
+    //退出登录
+    @RequestMapping(value = "/user/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void loginOut(HttpSession session, HttpServletResponse response) throws Exception{
+        session.invalidate();
+        response.sendRedirect("/user/login");
     }
 
     //编辑

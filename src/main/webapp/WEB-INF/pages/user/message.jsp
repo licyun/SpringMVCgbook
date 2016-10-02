@@ -10,20 +10,7 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
-    <form:form modelAttribute="user" method="post">
-        <div>
-            <label>邮箱</label>
-            <form:input path="email"/>
-            <form:errors path="email"/>
-        </div>
-        <div>
-            <label>密码</label>
-            <form:input path="passwd"/>
-            <form:errors path="passwd"/>
-        </div>
-        <div>
-            <input type="submit" value="登录"/>
-        </div>
-    </form:form>
+<h1>查看评论</h1>
+
 </body>
 </html>

@@ -95,8 +95,9 @@ public class UserService {
 
     private static List<User> populateDummyUsers(){
         List<User> users = new ArrayList<User>();
-        users.add(new User(counter.incrementAndGet(),"licyun", "mzkwy@outlook.com", "123456", " "));
-        users.add(new User(counter.incrementAndGet(),"lichengyun", "849528477@qq.com", "123456", ""));
+
+        users.add(new User((counter.incrementAndGet()),"licyun", "mzkwy@outlook.com", "123456", 1));
+        users.add(new User(counter.incrementAndGet(),"lichengyun", "849528477@qq.com", "123456"));
         return users;
     }
 }

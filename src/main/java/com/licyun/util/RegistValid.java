@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
  * Description:
  * 2016/9/27.
  */
+
 @Component
 public class RegistValid implements Validator {
     public boolean supports(Class<?> klass) {

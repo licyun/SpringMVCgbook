@@ -12,9 +12,9 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
     <!-- scan the package and the sub package -->
-    <context:component-scan base-package="com.licyun.controller"/>
+    <context:component-scan base-package="com.licyun"/>
 
-    <!-- 配置json -->
+    <!-- 总拦截器 -->
     <mvc:annotation-driven />
 
     <!--对静态资源文件的访问-->
@@ -33,5 +33,23 @@
           class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="message"></property>
     </bean>
+
+    <!-- 登录拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!-- 管理员登录拦截 -->
+            <mvc:mapping path="/admin"/>
+            <mvc:mapping path="/admin/*"/>
+            <mvc:exclude-mapping path="/admin/login"/>
+            <bean class="com.licyun.interceptor.AdminInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!-- 用户登录拦截 -->
+            <mvc:mapping path="/user"/>
+            <mvc:mapping path="/user/*"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <bean class="com.licyun.interceptor.UserInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>

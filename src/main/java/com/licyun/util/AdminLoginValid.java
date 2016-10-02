@@ -8,9 +8,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by 李呈云
@@ -18,7 +15,7 @@ import java.util.regex.Pattern;
  * 2016/9/27.
  */
 @Component
-public class LoginValid implements Validator {
+public class AdminLoginValid implements Validator {
     public boolean supports(Class<?> klass) {
         return User.class.isAssignableFrom(klass);
     }
@@ -35,6 +32,10 @@ public class LoginValid implements Validator {
                 errors.rejectValue("passwd", "userpasswd.error");
             }
         }else{
+            errors.rejectValue("email", "useremail.notexist");
+        }
+        //判断是否为管理员
+        if(userService.findByEmail(user.getEmail()).getType() != 1){
             errors.rejectValue("email", "useremail.notexist");
         }
     }
