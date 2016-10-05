@@ -1,16 +1,16 @@
 package com.licyun.controller;
 
-import com.licyun.vo.User;
+import com.licyun.model.User;
 import com.licyun.service.UserService;
 import com.licyun.util.LoginValid;
 import com.licyun.util.RegistValid;
 import com.licyun.util.UpdateValid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -23,9 +23,16 @@ import javax.validation.Valid;
 @Controller
 public class UserController {
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
     private UpdateValid updateValid;
+
+    @Autowired
     private RegistValid registValid;
+
+    @Autowired
     private LoginValid loginValid;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
@@ -55,11 +62,11 @@ public class UserController {
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.POST, RequestMethod.HEAD})
     public String register(@Valid  User user,BindingResult result){
         registValid = new RegistValid();
-        userService = new UserService();
         registValid.validate(user, result);
         if(result.hasErrors()){
             return "user/register";
         }
+        user.setType(1);
         userService.saveUser(user);
         return "user/index";
     }
@@ -67,7 +74,6 @@ public class UserController {
     //登录
     @RequestMapping(value = "/user/login", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(Model model, HttpSession session){
-        userService = new UserService();
         //判断session
         String userSession = (String)session.getAttribute("user");
         if(userSession != null){
@@ -80,9 +86,7 @@ public class UserController {
     @RequestMapping(value = "/user/login", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
-        userService = new UserService();
         //验证
-        loginValid = new LoginValid();
         loginValid.validate(user, result);
         if(result.hasErrors()){
             return "user/login";
@@ -101,8 +105,7 @@ public class UserController {
 
     //编辑
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-         public String edit(@PathVariable Long id, Model model){
-        userService = new UserService();
+         public String edit(@PathVariable int id, Model model){
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/edit";
@@ -110,12 +113,11 @@ public class UserController {
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String edit(@Valid User user,@Valid Long id, BindingResult result){
         updateValid = new UpdateValid();
-        userService = new UserService();
         updateValid.validate(user, result);
         if(result.hasErrors()){
             return "user/edit";
         }
-        userService.updateUser(id, user);
+        userService.updateUser(user);
         return "user/index";
     }
 }

@@ -1,22 +1,22 @@
-package com.licyun.service;
+package com.licyun.dao;
 
 import com.licyun.model.User;
-import java.util.List;
 
+import java.util.List;
 
 /**
  * Created by 李呈云
  * Description:
- * 2016/9/27.
+ * 2016/10/5.
  */
+public interface UserDao {
 
-public interface UserService {
 
     User findById(int id);
 
-    User findByName(String name);
+    List<User> findByName(String name);
 
-    User findByEmail(String email);
+    List<User> findByEmail(String email);
 
     void saveUser(User user);
 
@@ -25,9 +25,5 @@ public interface UserService {
     void deleteUser(User user);
 
     List<User> findAllUser();
-
-    boolean isUserNameExist(String name);
-
-    boolean isUserEmailExist(String email);
 
 }

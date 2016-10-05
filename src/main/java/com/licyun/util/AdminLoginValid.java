@@ -1,8 +1,8 @@
 package com.licyun.util;
 
-import com.licyun.vo.User;
+import com.licyun.model.User;
 import com.licyun.service.UserService;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -16,19 +16,25 @@ import org.springframework.validation.Validator;
  */
 @Component
 public class AdminLoginValid implements Validator {
+
+    @Autowired
+    private UserService userService;
+
     public boolean supports(Class<?> klass) {
         return User.class.isAssignableFrom(klass);
     }
 
     public void validate(Object target, Errors errors) {
-        UserService userService = new UserService();
         User user = (User) target;
+        User sqlUser = userService.findByEmail(user.getEmail());
         ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");
         ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");
-        if(userService.isUserEmailExist(user.getEmail())){
-            if(userService.findByEmail(user.getEmail()).getPasswd().equals(user.getPasswd())){
-                //判断是否为管理员
-                if(userService.findByEmail(user.getEmail()).getType() == 1){
+
+        if(sqlUser != null){
+            System.out.println("is null ");
+            if(sqlUser.getPasswd().equals(user.getPasswd())){
+                System.out.println("password"+ user.getPasswd());
+                if(sqlUser.getType() == 1){
 
                 }else{
                     errors.rejectValue("email", "useremail.notexist");
@@ -39,5 +45,6 @@ public class AdminLoginValid implements Validator {
         }else{
             errors.rejectValue("email", "useremail.notexist");
         }
+
     }
 }

@@ -1,8 +1,9 @@
 package com.licyun.util;
 
-import com.licyun.vo.User;
+import com.licyun.model.User;
 import com.licyun.service.UserService;
 import org.hibernate.event.spi.SaveOrUpdateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -16,12 +17,15 @@ import org.springframework.validation.Validator;
  */
 @Component
 public class LoginValid implements Validator {
+
+    @Autowired
+    private UserService userService;
+
     public boolean supports(Class<?> klass) {
         return User.class.isAssignableFrom(klass);
     }
 
     public void validate(Object target, Errors errors) {
-        UserService userService = new UserService();
         User user = (User) target;
         ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");
         ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");

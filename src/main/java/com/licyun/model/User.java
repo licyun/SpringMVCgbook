@@ -3,11 +3,10 @@ package com.licyun.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.annotation.Generated;
+
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * Created by 李呈云
@@ -19,16 +18,13 @@ import javax.validation.constraints.Size;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected int id;
 
-    @NotNull
-    @Digits(integer=8, fraction=0)
     @Column(name = "TYPE", nullable = false)
     protected int type;
 
-    @NotEmpty
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "NAME")
     private String name;
 
     @NotEmpty
@@ -44,14 +40,14 @@ public class User {
 
     public User(){}
 
-    public User(Long id, String name, String email, String passwd){
+    public User(int id, String name, String email, String passwd){
         this.name = name;
         this.id = id;
         this.email = email;
         this.passwd = passwd;
     }
 
-    public User(Long id, String name, String email, String passwd, int type){
+    public User(int id, String name, String email, String passwd, int type){
         this.name = name;
         this.id = id;
         this.email = email;
@@ -59,11 +55,11 @@ public class User {
         this.type = type;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(int id) { this.id = id; }
 
     public int getType() {
         return type;

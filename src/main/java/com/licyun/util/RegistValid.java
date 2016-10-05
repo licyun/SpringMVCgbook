@@ -1,7 +1,8 @@
 package com.licyun.util;
 
-import com.licyun.vo.User;
+import com.licyun.model.User;
 import com.licyun.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -18,6 +19,10 @@ import java.util.regex.Pattern;
 
 @Component
 public class RegistValid implements Validator {
+
+    @Autowired
+    private UserService userService;
+
     public boolean supports(Class<?> klass) {
         return User.class.isAssignableFrom(klass);
     }
@@ -44,7 +49,6 @@ public class RegistValid implements Validator {
         }
 
         //判断邮箱和用户名是否已经存在
-        UserService userService = new UserService();
         if (userService.isUserEmailExist(user.getEmail())) {
             errors.rejectValue("email", "useremail.exist");
         }

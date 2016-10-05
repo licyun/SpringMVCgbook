@@ -1,13 +1,11 @@
 package com.licyun.controller;
 
-import com.licyun.vo.User;
+import com.licyun.model.User;
 import com.licyun.service.UserService;
 import com.licyun.util.AdminLoginValid;
-import com.licyun.util.LoginValid;
 import com.licyun.util.RegistValid;
 import com.licyun.util.UpdateValid;
-import org.jboss.logging.annotations.ValidIdRange;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by 李呈云
@@ -27,21 +26,22 @@ import javax.validation.Valid;
 @Controller
 public class AdminController {
 
+    @Autowired
     private UserService userService;
+
+    @Autowired
     private RegistValid registValid;
+
+    @Autowired
     private UpdateValid updateValid;
+
+    @Autowired
     private AdminLoginValid adminLoginValid;
-
-    @Value("#{configProperties['hibernate.dialect']}")
-    private String dialect;
-
-
 
     //管理员首页
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String admin(Model model){
-        UserService userService = new UserService();
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }
 
@@ -49,10 +49,9 @@ public class AdminController {
     @RequestMapping(value = "/admin/login",method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(HttpSession session, Model model){
         //判断session
-        userService = new UserService();
         String userSession = (String)session.getAttribute("user");
         if(userSession != null){
-            model.addAttribute("users", userService.getAllUsers());
+            model.addAttribute("users", userService.findAllUser());
             return "/admin/index";
         }
         model.addAttribute(new User());
@@ -62,14 +61,13 @@ public class AdminController {
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
         //验证
-        userService = new UserService();
-        adminLoginValid = new AdminLoginValid();
         adminLoginValid.validate(user, result);
         if(result.hasErrors()){
+            model.addAttribute("user", new User());
             return "/admin/login";
         }
         session.setAttribute("user", user.getEmail());
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAllUser());
         return "/admin/index";
     }
 
@@ -80,7 +78,7 @@ public class AdminController {
         response.sendRedirect("/admin/login");
     }
 
-    //增加用户
+    //增加管理员
     @RequestMapping(value = "/admin/add", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String addUser(Model model){
         model.addAttribute("user",new User());
@@ -88,44 +86,41 @@ public class AdminController {
     }
     @RequestMapping(value = "admin/add", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String addUser(@Valid User user, BindingResult result, Model model){
-        registValid = new RegistValid();
-        userService = new UserService();
         registValid.validate(user, result);
         if(result.hasErrors()){
             return "admin/add";
         }
+        user.setType(2);
         userService.saveUser(user);
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }
 
     //删除用户
     @RequestMapping(value = "/admin/delete-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String deleteUser(@PathVariable Long id, Model model){
-        userService = new UserService();
+    public String deleteUser(@PathVariable int id, Model model){
         userService.deleteUser(userService.findById(id));
-        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("users", userService.findAllUser());
         return "/admin/index";
     }
 
     //修改用户
     @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String editUser(@PathVariable Long id,Model model){
-        userService = new UserService();
+    public String editUser(@PathVariable int id,Model model){
         model.addAttribute("user",userService.findById(id));
         return "/admin/edit";
     }
     @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
-    public String editUser(@Valid User user, @PathVariable Long id,
+    public String editUser(@Valid User user, @PathVariable int id,
                            BindingResult result, Model model){
+        System.out.println("admin edit");
         updateValid = new UpdateValid();
-        userService = new UserService();
         updateValid.validate(user, result);
         if(result.hasErrors()){
             return "/admin/edit";
         }
-        userService.updateUser(id, user);
-        model.addAttribute("users", userService.getAllUsers());
+        userService.updateUser(user);
+        model.addAttribute("users", userService.findAllUser());
         return "/admin/index";
     }
 
