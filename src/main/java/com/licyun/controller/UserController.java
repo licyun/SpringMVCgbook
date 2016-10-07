@@ -1,11 +1,8 @@
 package com.licyun.controller;
 
 import com.licyun.model.User;
-import com.licyun.vo.UserBean;
+import com.licyun.util.Validate;
 import com.licyun.service.UserService;
-import com.licyun.util.LoginValid;
-import com.licyun.util.RegistValid;
-import com.licyun.util.UpdateValid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +25,7 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private UpdateValid updateValid;
-
-    @Autowired
-    private RegistValid registValid;
-
-    @Autowired
-    private LoginValid loginValid;
+    private Validate validate;
 
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(){
@@ -45,6 +36,9 @@ public class UserController {
     @RequestMapping(value = {"/user"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String userIndex(HttpSession session, Model model){
         User sessionUser = (User)session.getAttribute("user");
+        System.out.println(sessionUser.getId());
+        System.out.println(sessionUser.getEmail());
+        System.out.println(sessionUser.getName());
         if(sessionUser != null){
             model.addAttribute("user", sessionUser);
             return "user/index";
@@ -67,7 +61,7 @@ public class UserController {
     }
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.POST, RequestMethod.HEAD})
     public String register(@Valid  User user,BindingResult result){
-        registValid.validate(user, result);
+        validate.registValidate(user, result);
         if(result.hasErrors()){
             return "user/register";
         }
@@ -92,7 +86,7 @@ public class UserController {
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
         //验证
-        loginValid.validate(user, result);
+        validate.loginValidate(user, result);
         if(result.hasErrors()){
             return "user/login";
         }
@@ -117,12 +111,15 @@ public class UserController {
     }
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String edit(@Valid User user,@Valid int id, BindingResult result){
-        updateValid.validate(user, result);
+        validate.updateValidate(user, id, result);
         if(result.hasErrors()){
             return "user/edit";
         }
-        user.setId(id);
-        userService.updateUser(user);
+        User sqlUser = userService.findById(id);
+        sqlUser.setEmail(user.getEmail());
+        sqlUser.setName(user.getName());
+        sqlUser.setPasswd(user.getPasswd());
+        userService.updateUser(sqlUser);
         return "user/index";
     }
 }

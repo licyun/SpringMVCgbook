@@ -1,11 +1,8 @@
 package com.licyun.controller;
 
 import com.licyun.model.User;
-import com.licyun.vo.UserBean;
+import com.licyun.util.Validate;
 import com.licyun.service.UserService;
-import com.licyun.util.AdminLoginValid;
-import com.licyun.util.RegistValid;
-import com.licyun.util.UpdateValid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
 
 /**
  * Created by 李呈云
@@ -31,19 +27,13 @@ public class AdminController {
     private UserService userService;
 
     @Autowired
-    private RegistValid registValid;
-
-    @Autowired
-    private UpdateValid updateValid;
-
-    @Autowired
-    private AdminLoginValid adminLoginValid;
+    private Validate validate;
 
     //管理员首页
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String admin(HttpSession session, Model model){
         //判断session
-        User sessionUser = (User)session.getAttribute("user");
+        User sessionUser = (User)session.getAttribute("admin");
         if(sessionUser != null){
             model.addAttribute("users", userService.findAllUser());
             return "admin/index";
@@ -56,7 +46,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/login",method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(HttpSession session, Model model){
         //判断session
-        User sessionUser = (User)session.getAttribute("user");
+        User sessionUser = (User)session.getAttribute("admin");
         if(sessionUser != null){
             model.addAttribute("users", userService.findAllUser());
             return "admin/index";
@@ -68,12 +58,12 @@ public class AdminController {
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
         //验证
-        adminLoginValid.validate(user, result);
+        validate.loginValidate(user, result);
         if(result.hasErrors()){
 
             return "admin/login";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("admin", user);
         model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }
@@ -93,7 +83,7 @@ public class AdminController {
     }
     @RequestMapping(value = "admin/add", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String addUser(@Valid User user, BindingResult result, Model model){
-        registValid.validate(user, result);
+        validate.registValidate(user, result);
         if(result.hasErrors()){
             return "admin/add";
         }
@@ -121,19 +111,15 @@ public class AdminController {
     public String editUser(@Valid User user, @PathVariable int id,
                            BindingResult result, Model model){
         //验证输入格式
-        updateValid.validate(user, result);
+        validate.updateValidate(user, id, result);
         if(result.hasErrors()){
             return "admin/edit";
         }
-        //获取修改前的数据
-        User updateUser = userService.findById(id);
-        updateUser.setName(user.getName());
-        updateUser.setEmail(user.getEmail());
-        //密码为空则不修改
-        System.out.println("length"+user.getPasswd().length());
-        if(user.getPasswd().length() != 0)
-            updateUser.setPasswd(user.getPasswd());
-        userService.updateUser(updateUser);
+        User sqlUser = userService.findById(id);
+        sqlUser.setEmail(user.getEmail());
+        sqlUser.setName(user.getName());
+        sqlUser.setPasswd(user.getPasswd());
+        userService.updateUser(sqlUser);
         model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }

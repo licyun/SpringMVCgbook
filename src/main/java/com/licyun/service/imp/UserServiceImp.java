@@ -64,21 +64,23 @@ public class UserServiceImp implements UserService {
         return userDao.findAllUser();
     }
 
-    public boolean isUserNameExist(String name){
+    public boolean isUserEmailExist(String email){
         List<User> users = findAllUser();
         for(User user : users){
-            if(user.getName().equals(name)){
+            if(user.getEmail().equals(email)){
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isUserEmailExist(String email){
+    public boolean isUserEmailExistExceptSelf(String sqlEmail, String localEmail){
         List<User> users = findAllUser();
         for(User user : users){
-            if(user.getEmail().equals(email)){
-                return true;
+            if(!user.getEmail().equals(localEmail)){
+                if(user.getEmail().equals(sqlEmail)){
+                    return true;
+                }
             }
         }
         return false;

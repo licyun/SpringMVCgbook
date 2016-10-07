@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminInterceptor implements HandlerInterceptor {
     //拦截前处理
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception{
-        Object sessionobj = request.getSession().getAttribute("user");
+        Object sessionobj = request.getSession().getAttribute("admin");
         if(sessionobj != null){
             return true;
         }else{

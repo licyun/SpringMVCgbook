@@ -26,8 +26,8 @@ public interface UserService {
 
     List<User> findAllUser();
 
-    boolean isUserNameExist(String name);
-
     boolean isUserEmailExist(String email);
+
+    boolean isUserEmailExistExceptSelf(String sqlEmail, String localEmail);
 
 }
