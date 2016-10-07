@@ -1,6 +1,7 @@
 package com.licyun.controller;
 
 import com.licyun.model.User;
+import com.licyun.vo.UserBean;
 import com.licyun.service.UserService;
 import com.licyun.util.AdminLoginValid;
 import com.licyun.util.RegistValid;
@@ -40,7 +41,13 @@ public class AdminController {
 
     //管理员首页
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String admin(Model model){
+    public String admin(HttpSession session, Model model){
+        //判断session
+        User sessionUser = (User)session.getAttribute("user");
+        if(sessionUser != null){
+            model.addAttribute("users", userService.findAllUser());
+            return "admin/index";
+        }
         model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }
@@ -49,13 +56,13 @@ public class AdminController {
     @RequestMapping(value = "/admin/login",method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(HttpSession session, Model model){
         //判断session
-        String userSession = (String)session.getAttribute("user");
-        if(userSession != null){
+        User sessionUser = (User)session.getAttribute("user");
+        if(sessionUser != null){
             model.addAttribute("users", userService.findAllUser());
-            return "/admin/index";
+            return "admin/index";
         }
         model.addAttribute(new User());
-        return "/admin/login";
+        return "admin/login";
     }
     @RequestMapping(value = "/admin/login",method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
@@ -63,12 +70,12 @@ public class AdminController {
         //验证
         adminLoginValid.validate(user, result);
         if(result.hasErrors()){
-            model.addAttribute("user", new User());
-            return "/admin/login";
+
+            return "admin/login";
         }
-        session.setAttribute("user", user.getEmail());
+        session.setAttribute("user", user);
         model.addAttribute("users", userService.findAllUser());
-        return "/admin/index";
+        return "admin/index";
     }
 
     //退出登录
@@ -101,32 +108,39 @@ public class AdminController {
     public String deleteUser(@PathVariable int id, Model model){
         userService.deleteUser(userService.findById(id));
         model.addAttribute("users", userService.findAllUser());
-        return "/admin/index";
+        return "admin/index";
     }
 
     //修改用户
     @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String editUser(@PathVariable int id,Model model){
         model.addAttribute("user",userService.findById(id));
-        return "/admin/edit";
+        return "admin/edit";
     }
     @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String editUser(@Valid User user, @PathVariable int id,
                            BindingResult result, Model model){
-        System.out.println("admin edit");
-        updateValid = new UpdateValid();
+        //验证输入格式
         updateValid.validate(user, result);
         if(result.hasErrors()){
-            return "/admin/edit";
+            return "admin/edit";
         }
-        userService.updateUser(user);
+        //获取修改前的数据
+        User updateUser = userService.findById(id);
+        updateUser.setName(user.getName());
+        updateUser.setEmail(user.getEmail());
+        //密码为空则不修改
+        System.out.println("length"+user.getPasswd().length());
+        if(user.getPasswd().length() != 0)
+            updateUser.setPasswd(user.getPasswd());
+        userService.updateUser(updateUser);
         model.addAttribute("users", userService.findAllUser());
-        return "/admin/index";
+        return "admin/index";
     }
 
     //查看用户留言
     @RequestMapping(value = "/admin/message-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(){
-        return "/admin/message";
+        return "admin/message";
     }
 }

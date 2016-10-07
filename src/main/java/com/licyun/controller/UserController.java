@@ -1,6 +1,7 @@
 package com.licyun.controller;
 
 import com.licyun.model.User;
+import com.licyun.vo.UserBean;
 import com.licyun.service.UserService;
 import com.licyun.util.LoginValid;
 import com.licyun.util.RegistValid;
@@ -42,7 +43,13 @@ public class UserController {
 
     //用户首页
     @RequestMapping(value = {"/user"}, method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String userIndex(){
+    public String userIndex(HttpSession session, Model model){
+        User sessionUser = (User)session.getAttribute("user");
+        if(sessionUser != null){
+            model.addAttribute("user", sessionUser);
+            return "user/index";
+        }
+        model.addAttribute("user", new User());
         return "/user/index";
     }
 
@@ -52,7 +59,6 @@ public class UserController {
         return "/user/message";
     }
 
-
     //注册
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String register(Model model){
@@ -61,7 +67,6 @@ public class UserController {
     }
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.POST, RequestMethod.HEAD})
     public String register(@Valid  User user,BindingResult result){
-        registValid = new RegistValid();
         registValid.validate(user, result);
         if(result.hasErrors()){
             return "user/register";
@@ -75,9 +80,9 @@ public class UserController {
     @RequestMapping(value = "/user/login", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(Model model, HttpSession session){
         //判断session
-        String userSession = (String)session.getAttribute("user");
-        if(userSession != null){
-            model.addAttribute("user", userService.findByEmail(userSession));
+        User sessionUser = (User)session.getAttribute("user");
+        if(sessionUser != null){
+            model.addAttribute("user", sessionUser);
             return "user/index";
         }
         model.addAttribute("user", new User());
@@ -91,7 +96,7 @@ public class UserController {
         if(result.hasErrors()){
             return "user/login";
         }
-        session.setAttribute("user", user.getEmail());
+        session.setAttribute("user", userService.findByEmail(user.getEmail()));
         model.addAttribute("user", userService.findByEmail(user.getEmail()));
         return "user/index";
     }
@@ -111,12 +116,12 @@ public class UserController {
         return "user/edit";
     }
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
-    public String edit(@Valid User user,@Valid Long id, BindingResult result){
-        updateValid = new UpdateValid();
+    public String edit(@Valid User user,@Valid int id, BindingResult result){
         updateValid.validate(user, result);
         if(result.hasErrors()){
             return "user/edit";
         }
+        user.setId(id);
         userService.updateUser(user);
         return "user/index";
     }

@@ -29,6 +29,7 @@ public class RegistValid implements Validator {
 
     public void validate(Object target, Errors errors) {
         User user = (User) target;
+
         //判断是否为空
         ValidationUtils.rejectIfEmpty(errors, "name", "username.required");
         ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");

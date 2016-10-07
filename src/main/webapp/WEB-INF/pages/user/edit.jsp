@@ -12,8 +12,6 @@
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
 <h1>修改个人信息</h1>
 <form:form modelAttribute="user" method="post">
-    <form:input type="hidden" path="id"/>
-    <form:input type="hidden" path="imgUrl"/>
     <p>
         <label>name:</label>
         <form:input path="name" id="name"/>

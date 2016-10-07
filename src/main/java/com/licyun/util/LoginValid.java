@@ -2,7 +2,6 @@ package com.licyun.util;
 
 import com.licyun.model.User;
 import com.licyun.service.UserService;
-import org.hibernate.event.spi.SaveOrUpdateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -27,10 +26,13 @@ public class LoginValid implements Validator {
 
     public void validate(Object target, Errors errors) {
         User user = (User) target;
+
         ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");
         ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");
-        if(userService.isUserEmailExist(user.getEmail())){
-            if(userService.findByEmail(user.getEmail()).getPasswd().equals(user.getPasswd())){
+
+        User sqlUser = userService.findByEmail(user.getEmail());
+        if(sqlUser != null){
+            if(sqlUser.getPasswd().equals(user.getPasswd())){
 
             }else{
                 errors.rejectValue("passwd", "userpasswd.error");
@@ -39,5 +41,4 @@ public class LoginValid implements Validator {
             errors.rejectValue("email", "useremail.notexist");
         }
     }
-
 }

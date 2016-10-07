@@ -5,8 +5,8 @@ import com.licyun.service.UserService;
 import com.licyun.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -15,8 +15,8 @@ import java.util.List;
  * Description:
  * 2016/9/27.
  */
-@Service
 @Transactional
+@Service("UserService")
 public class UserServiceImp implements UserService {
 
     @Autowired
@@ -29,22 +29,22 @@ public class UserServiceImp implements UserService {
     public User findByName(String name){
 
         List<User> users = userDao.findByName(name);
-
+        if(users.isEmpty()){
+            return null;
+        }
         User user;
-
-            user = (User) users.get(0);
-
+            user =  users.get(0);
         return  user;
     }
 
     public User findByEmail(String email){
 
         List<User> users = userDao.findByEmail(email);
-
+        if(users.isEmpty()){
+            return null;
+        }
         User user;
-
-        user = (User) users.get(0);
-
+        user =  users.get(0);
         return  user;
     }
 
@@ -75,7 +75,6 @@ public class UserServiceImp implements UserService {
     }
 
     public boolean isUserEmailExist(String email){
-        System.out.println("find all user");
         List<User> users = findAllUser();
         for(User user : users){
             if(user.getEmail().equals(email)){

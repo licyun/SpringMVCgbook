@@ -9,7 +9,7 @@
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>
 <body>
-<c:import url="/WEB-INF/pages/include/user_header.jsp"/>
+<c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
 <form:form modelAttribute="user" method="post">
     <div>
         <label>邮箱</label>

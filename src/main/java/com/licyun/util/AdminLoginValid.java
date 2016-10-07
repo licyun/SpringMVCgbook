@@ -26,25 +26,26 @@ public class AdminLoginValid implements Validator {
 
     public void validate(Object target, Errors errors) {
         User user = (User) target;
-        User sqlUser = userService.findByEmail(user.getEmail());
-        ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");
-        ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");
 
-        if(sqlUser != null){
-            System.out.println("is null ");
-            if(sqlUser.getPasswd().equals(user.getPasswd())){
-                System.out.println("password"+ user.getPasswd());
-                if(sqlUser.getType() == 1){
+            //获取数据库中邮箱为输入邮箱的对象并比较密码和type
+        if(!user.getEmail().equals("") && !user.getPasswd().equals("")){
+            if( userService.isUserEmailExist(user.getEmail()) ){
+                User sqlUser = userService.findByEmail(user.getEmail());
+                if(sqlUser.getPasswd().equals(user.getPasswd())){
+                    if(sqlUser.getType() == 1){
 
+                    }else{
+                        errors.rejectValue("email", "useremail.notexist");
+                    }
                 }else{
-                    errors.rejectValue("email", "useremail.notexist");
+                    errors.rejectValue("passwd", "userpasswd.error");
                 }
             }else{
-                errors.rejectValue("passwd", "userpasswd.error");
-            }
-        }else{
-            errors.rejectValue("email", "useremail.notexist");
-        }
+                errors.rejectValue("email", "useremail.notexist");
 
+            }
+            ValidationUtils.rejectIfEmpty(errors, "email", "useremail.required");
+            ValidationUtils.rejectIfEmpty(errors, "passwd", "userpasswd.required");
+        }
     }
 }

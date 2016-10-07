@@ -18,8 +18,6 @@
 <h1>修改用户</h1>
 <div>
     <form:form modelAttribute="user" method="post">
-        <form:input type="hidden" path="id"/>
-        <form:input type="hidden" path="imgUrl"/>
         <p>
             <label>name:</label>
             <form:input path="name" id="name"/>
@@ -32,7 +30,7 @@
         </p>
         <p>
             <label>passwd:</label>
-            <form:password path="passwd" id="passwd"/>
+            <form:input path="passwd" id="passwd"/>
             <form:errors path="passwd"/>
         </p>
         <p>
