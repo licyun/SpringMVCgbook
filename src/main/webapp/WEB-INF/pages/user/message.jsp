@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>register</title>
+    <title>留言</title>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>

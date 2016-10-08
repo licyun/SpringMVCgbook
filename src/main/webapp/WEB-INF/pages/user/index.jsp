@@ -11,7 +11,7 @@
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
 <h1>用户管理界面</h1>
-<div>
+<div class="wrap">
         <p>用户id：${user.id}</p>
         <p>用户名：${user.name} </p>
         <p>用户邮箱：${user.email} </p>

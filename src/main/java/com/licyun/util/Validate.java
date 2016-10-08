@@ -1,5 +1,6 @@
 package com.licyun.util;
 
+import com.licyun.model.Message;
 import com.licyun.model.User;
 import com.licyun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,11 +56,8 @@ public class Validate {
     }
 
     public void loginValidate(User user, Errors errors){
-        System.out.println("before commonValidate");
         commonValidate(user, errors);
-        System.out.println("before sqlUser");
         User sqlUser = userService.findByEmail(user.getEmail());
-        System.out.println("after sqlUser");
         if(sqlUser != null){
             if(sqlUser.getPasswd().equals(user.getPasswd())){
 
@@ -76,6 +74,18 @@ public class Validate {
         User sqlUser = userService.findById(id);
         if( userService.isUserEmailExistExceptSelf(sqlUser.getEmail(), user.getEmail()) ){
             errors.rejectValue("email", "useremail.exist");
+        }
+    }
+
+    public void messageValidate(Message message, Errors errors){
+        if(message.getMessage() != ""){
+            if(message.getMessage().length() < 255){
+
+            }else{
+                errors.rejectValue("message", "message.required");
+            }
+        }else{
+            ValidationUtils.rejectIfEmpty(errors, "message", "message.required");
         }
     }
 }

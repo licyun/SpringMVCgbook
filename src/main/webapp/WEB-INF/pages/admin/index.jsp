@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
@@ -6,12 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <title>管理员首页</title>
-    <link type="text/css" rel="stylesheet" href="<c:url value='/static/admin_main.css'/>">
+    <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
 <h1>管理员界面</h1>
-<div>
+<div class="wrap">
     <table border="1">
         <thead>
             <td>用户头像</td>

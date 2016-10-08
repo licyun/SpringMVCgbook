@@ -14,3 +14,11 @@ header{
     margin: auto;
     text-decoration: none;
 }
+.wrap{
+    width: 960px;
+    margin: auto;
+}
+h1{
+    width: 600px;
+    margin: auto;
+}

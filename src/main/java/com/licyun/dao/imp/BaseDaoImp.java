@@ -54,6 +54,22 @@ public  class BaseDaoImp<T> extends HibernateDaoSupport implements BaseDao<T> {
 
     @Transactional(readOnly=true)
     @SuppressWarnings("unchecked")
+    public List<T> find(String queryName) {
+        // TODO Auto-generated method stub
+        List<T> list = (List<T>) getHibernateTemplate().find(queryName);
+        return list;
+    }
+
+    @Transactional(readOnly=true)
+    @SuppressWarnings("unchecked")
+    public List<T> find(String queryName, int values) {
+        // TODO Auto-generated method stub
+        List<T> list = (List<T>) getHibernateTemplate().find(queryName, values);
+        return list;
+    }
+
+    @Transactional(readOnly=true)
+    @SuppressWarnings("unchecked")
     public List<T> find(String queryName, String values) {
         // TODO Auto-generated method stub
         List<T> list = (List<T>) getHibernateTemplate().find(queryName, values);

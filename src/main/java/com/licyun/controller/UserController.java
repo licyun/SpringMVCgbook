@@ -1,8 +1,12 @@
 package com.licyun.controller;
 
+import com.licyun.dao.MessageDao;
+import com.licyun.model.Message;
 import com.licyun.model.User;
+import com.licyun.service.MessageService;
 import com.licyun.util.Validate;
 import com.licyun.service.UserService;
+import com.licyun.vo.MessageBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by 李呈云
@@ -27,18 +32,49 @@ public class UserController {
     @Autowired
     private Validate validate;
 
+    @Autowired
+    private MessageService messageService;
+
+    //首页
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String index(){
+    public String index(Model model, HttpSession session){
+        List<Object[]> list = messageService.findAllMessage();
+        model.addAttribute("messages", list);
+        model.addAttribute("message", new Message());
+        User sessionUser = (User)session.getAttribute("user");
+        if(sessionUser != null){
+            model.addAttribute("user", sessionUser);
+            model.addAttribute("ifLogin", true);
+            return "index";
+        }
+        model.addAttribute("ifLogin", false);
         return "index";
+    }
+    @RequestMapping(value = "/", method = {RequestMethod.POST})
+    public String index(@Valid Message message,BindingResult result,
+                        Model model, HttpSession session) {
+        validate.messageValidate(message, result);
+        if(result.hasErrors()){
+            return "index";
+        }
+        User sessionUser = (User) session.getAttribute("user");
+        message.setUserid(sessionUser.getId());
+        messageService.saveMessage(message);
+        return "index";
+    }
+
+    @RequestMapping(value = "/gbook", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String gbook(Model model){
+        List<Object[]> list = messageService.findAllMessage();
+
+        model.addAttribute("messages", list);
+        return "gbook";
     }
 
     //用户首页
     @RequestMapping(value = {"/user"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String userIndex(HttpSession session, Model model){
         User sessionUser = (User)session.getAttribute("user");
-        System.out.println(sessionUser.getId());
-        System.out.println(sessionUser.getEmail());
-        System.out.println(sessionUser.getName());
         if(sessionUser != null){
             model.addAttribute("user", sessionUser);
             return "user/index";

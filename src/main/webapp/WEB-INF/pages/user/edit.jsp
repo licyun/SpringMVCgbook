@@ -11,7 +11,7 @@
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
 <h1>修改个人信息</h1>
-<form:form modelAttribute="user" method="post">
+<form:form modelAttribute="user" method="post" cssClass="wrap">
     <p>
         <label>name:</label>
         <form:input path="name" id="name"/>
@@ -24,7 +24,7 @@
     </p>
     <p>
         <label>passwd:</label>
-        <form:password path="passwd" id="passwd"/>
+        <form:input path="passwd" id="passwd"/>
         <form:errors path="passwd"/>
     </p>
     <p>

@@ -1,6 +1,7 @@
 package com.licyun.controller;
 
 import com.licyun.model.User;
+import com.licyun.service.MessageService;
 import com.licyun.util.Validate;
 import com.licyun.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created by 李呈云
@@ -28,6 +30,9 @@ public class AdminController {
 
     @Autowired
     private Validate validate;
+
+    @Autowired
+    private MessageService messageService;
 
     //管理员首页
     @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
@@ -60,7 +65,6 @@ public class AdminController {
         //验证
         validate.loginValidate(user, result);
         if(result.hasErrors()){
-
             return "admin/login";
         }
         session.setAttribute("admin", user);
@@ -83,6 +87,7 @@ public class AdminController {
     }
     @RequestMapping(value = "admin/add", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String addUser(@Valid User user, BindingResult result, Model model){
+        System.out.println(user.getName());
         validate.registValidate(user, result);
         if(result.hasErrors()){
             return "admin/add";
@@ -126,7 +131,18 @@ public class AdminController {
 
     //查看用户留言
     @RequestMapping(value = "/admin/message-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String message(){
+    public String message(Model model, @PathVariable int id){
+        List<Object[]> list = messageService.findMessagesByUserId(id);
+        model.addAttribute("messages", list);
+        model.addAttribute("id", id);
         return "admin/message";
+    }
+
+    //删除用户留言
+    @RequestMapping(value = "/admin/deleteMessage-{uid}-{mid}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void deleteMessage(@PathVariable int mid, @PathVariable int uid,
+                              HttpServletResponse response) throws Exception{
+        messageService.deleteMessageById(mid);
+        response.sendRedirect("/admin/message-"+uid);
     }
 }

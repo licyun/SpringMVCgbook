@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>register</title>
+    <title>登录</title>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
-    <form:form modelAttribute="user" method="post">
+    <form:form modelAttribute="user" method="post" cssClass="wrap">
         <div>
             <label>邮箱</label>
             <form:input path="email"/>

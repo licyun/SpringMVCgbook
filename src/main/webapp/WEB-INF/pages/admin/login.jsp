@@ -1,16 +1,16 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>register</title>
+    <title>登录</title>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
-<form:form modelAttribute="user" method="post">
+<form:form modelAttribute="user" method="post" class="wrap">
     <div>
         <label>邮箱</label>
         <form:input path="email"/>

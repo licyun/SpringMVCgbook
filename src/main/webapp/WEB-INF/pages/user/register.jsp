@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>register</title>
+    <title>注册</title>
     <meta charset="UTF-8">
     <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
 </head>
@@ -13,7 +13,7 @@
     <h1>
         注册
     </h1>
-    <form:form modelAttribute="user" method="post">
+    <form:form modelAttribute="user" method="post" cssClass="wrap">
         <p>
             <label>name:</label>
             <form:input path="name" id="name"/>
