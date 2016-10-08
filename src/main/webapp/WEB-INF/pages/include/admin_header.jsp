@@ -1,12 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<header>
-    <ul>
-        <li class="header-li"><a href="/admin">首页</a></li>
-        <li class="header-li"><a href="/admin/add">添加用户</a></li>
-        <li class="header-li"><a href="/admin">查看所有用户</a></li>
-        <li class="header-li"><a href="/admin/login">登录</a></li>
-        <li class="header-li"><a href="/admin/loginout">退出</a></li>
-    </ul>
-</header>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">留言板</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/admin/login">登录</a></li>
+                <li><a href="/admin/add">添加用户</a></li>
+                <li><a href="/admin">查看所有用户</a></li>
+                <li><a href="/user/loginout">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,24 +1,13 @@
-header{
-    width: 960px;
-    height: 50px;
-    margin: auto;
+.allcomment{
+
 }
-.header-li{
-    float: left;
-    list-style: none;
-    width: 120px;
+.comment{
+    border-bottom: 1px solid rgba(0,0,0,0.13);
+    margin-bottom: 10px;
 }
-.header-li a {
-    display: block;
-    width: 100px;
-    margin: auto;
-    text-decoration: none;
+.comment-head{
+
 }
-.wrap{
-    width: 960px;
-    margin: auto;
-}
-h1{
-    width: 600px;
-    margin: auto;
+.comment-body{
+
 }

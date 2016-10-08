@@ -6,31 +6,37 @@
 <head>
     <meta charset="UTF-8">
     <title>添加用户</title>
-    <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
+    <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
-<h1>增加用户</h1>
-<div class="wrap">
-    <form:form modelAttribute="user" method="post">
-        <p>
-            <label>name:</label>
-            <form:input path="name" id="name"/>
-            <form:errors path="name"/>
-        </p>
-        <p>
-            <label>email:</label>
-            <form:input path="email" id="email"/>
-            <form:errors path="email"/>
-        </p>
-        <p>
-            <label>passwd:</label>
-            <form:password path="passwd" id="passwd"/>
-            <form:errors path="passwd"/>
-        </p>
-        <p>
-            <input type="submit" value="添加用户">
-        </p>
+<h1 class="col-sm-offset-1">增加用户</h1>
+<div class="container">
+    <form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">name:</label>
+            <div class="col-sm-4">
+                <form:input path="name" id="name"/>
+                <form:errors path="name"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">email:</label>
+            <div class="col-sm-4">
+                <form:input path="email" id="email"/>
+                <form:errors path="email"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="passwd" class="col-sm-2 control-label">passwd:</label>
+            <div class="col-sm-4">
+                <form:password path="passwd" id="passwd"/>
+                <form:errors path="passwd"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-default col-sm-offset-2" value="添加用户">
+        </div>
     </form:form>
 </div>
 </body>

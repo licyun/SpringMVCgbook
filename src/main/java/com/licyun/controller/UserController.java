@@ -36,7 +36,7 @@ public class UserController {
     private MessageService messageService;
 
     //首页
-    @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(Model model, HttpSession session){
         List<Object[]> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
@@ -50,13 +50,15 @@ public class UserController {
         model.addAttribute("ifLogin", false);
         return "index";
     }
-    @RequestMapping(value = "/", method = {RequestMethod.POST})
+    @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST})
     public String index(@Valid Message message,BindingResult result,
                         Model model, HttpSession session) {
         validate.messageValidate(message, result);
         if(result.hasErrors()){
             return "index";
         }
+        List<Object[]> list = messageService.findAllMessage();
+        model.addAttribute("messages", list);
         User sessionUser = (User) session.getAttribute("user");
         message.setUserid(sessionUser.getId());
         messageService.saveMessage(message);
@@ -85,7 +87,21 @@ public class UserController {
 
     //用户评论
     @RequestMapping(value = "/user/message", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String message(){
+    public String message(HttpSession session, Model model){
+        User user = (User)session.getAttribute("user");
+        List<Object[]> list = messageService.findMessagesByUserId(user.getId());
+        model.addAttribute("messages", list);
+        return "/user/message";
+    }
+
+    //删除用户评论
+    @RequestMapping(value = "/user/deleteMessage-{mid}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String deleteMessage(HttpSession session, Model model,
+                                @PathVariable int mid){
+        User user = (User)session.getAttribute("user");
+        messageService.deleteMessageById(mid);
+        List<Object[]> list = messageService.findMessagesByUserId(user.getId());
+        model.addAttribute("messages", list);
         return "/user/message";
     }
 
@@ -158,4 +174,5 @@ public class UserController {
         userService.updateUser(sqlUser);
         return "user/index";
     }
+
 }

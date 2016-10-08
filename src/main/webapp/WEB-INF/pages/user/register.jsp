@@ -6,7 +6,7 @@
 <head>
     <title>注册</title>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
+    <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>

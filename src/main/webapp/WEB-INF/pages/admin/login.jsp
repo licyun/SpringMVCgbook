@@ -6,24 +6,36 @@
 <head>
     <title>登录</title>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="<c:url value='/static/main.css'/>">
+    <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
-<form:form modelAttribute="user" method="post" class="wrap">
-    <div>
-        <label>邮箱</label>
-        <form:input path="email"/>
-        <form:errors path="email"/>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="col-sm-offset-4">管理员登录</h1>
+        <form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label">邮箱</label>
+                <div class="col-sm-4">
+                    <form:input path="email" class="form-control"/>
+                    <form:errors path="email"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label">密码</label>
+                <div class="col-sm-4">
+                    <form:input path="passwd" class="form-control"/>
+                    <form:errors path="passwd"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <input type="submit" class="btn btn-primary btn-lg" role="button" value="登录"/>
+                </div>
+
+            </div>
+        </form:form>
     </div>
-    <div>
-        <label>密码</label>
-        <form:input path="passwd"/>
-        <form:errors path="passwd"/>
-    </div>
-    <div>
-        <input type="submit" value="登录"/>
-    </div>
-</form:form>
+</div>
 </body>
 </html>
