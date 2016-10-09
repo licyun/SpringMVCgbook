@@ -38,6 +38,7 @@
     </bean>
 
     <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
+    <mvc:resources mapping="/upload/**" location="/WEB-INF/upload/"/>
 
     <mvc:default-servlet-handler />
 
@@ -56,6 +57,7 @@
             <mvc:mapping path="/user"/>
             <mvc:mapping path="/user/*"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/register"/>
             <bean class="com.licyun.interceptor.UserInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>

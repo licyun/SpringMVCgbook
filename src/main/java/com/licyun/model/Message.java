@@ -19,6 +19,26 @@ public class Message {
     @Column(name = "message", nullable = false)
     private String message;
 
+    private String date;
+
+    private String ip;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
     public int getUserid() {
         return userid;
     }

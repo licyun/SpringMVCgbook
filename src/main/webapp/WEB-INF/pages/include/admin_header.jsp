@@ -7,7 +7,7 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/admin/login">登录</a></li>
+                <li><a href="/admin/login">登录</a></li>
                 <li><a href="/admin/add">添加用户</a></li>
                 <li><a href="/admin">查看所有用户</a></li>
                 <li><a href="/user/loginout">退出</a></li>

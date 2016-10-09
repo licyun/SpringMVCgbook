@@ -10,7 +10,9 @@
 </head>
 <body>
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
+
 <h1 class="col-sm-offset-1">修改个人信息</h1>
+<div class="container">
 <form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
     <div class="form-group">
         <label class="col-sm-2 control-label">name:</label>
@@ -39,5 +41,6 @@
         </div>
     </div>
 </form:form>
+</div>
 </body>
 </html>

@@ -4,6 +4,8 @@ import com.licyun.dao.MessageDao;
 import com.licyun.model.Message;
 import com.licyun.model.User;
 import com.licyun.service.MessageService;
+import com.licyun.util.GetDate;
+import com.licyun.util.UploadImg;
 import com.licyun.util.Validate;
 import com.licyun.service.UserService;
 import com.licyun.vo.MessageBean;
@@ -12,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -25,6 +29,15 @@ import java.util.List;
  */
 @Controller
 public class UserController {
+
+    //图片路径
+    private final String IMGURL = "/WEB-INF/upload";
+
+    @Autowired
+    private UploadImg uploadImg;
+
+    @Autowired
+    private GetDate getDate;
 
     @Autowired
     private UserService userService;
@@ -52,7 +65,7 @@ public class UserController {
     }
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST})
     public String index(@Valid Message message,BindingResult result,
-                        Model model, HttpSession session) {
+                        Model model, HttpSession session, HttpServletRequest request) {
         validate.messageValidate(message, result);
         if(result.hasErrors()){
             return "index";
@@ -61,6 +74,8 @@ public class UserController {
         model.addAttribute("messages", list);
         User sessionUser = (User) session.getAttribute("user");
         message.setUserid(sessionUser.getId());
+        message.setDate(getDate.getDate());
+        message.setIp(request.getRemoteAddr());
         messageService.saveMessage(message);
         return "index";
     }
@@ -173,6 +188,27 @@ public class UserController {
         sqlUser.setPasswd(user.getPasswd());
         userService.updateUser(sqlUser);
         return "user/index";
+    }
+
+    // 修改图片
+    @RequestMapping(value = "/user/edit-img", method = RequestMethod.GET)
+    public String uploadOneFileHandler(HttpSession session, Model model) {
+        //通过session获取user
+        User user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
+        return "/user/editimg";
+    }
+    @RequestMapping(value = "/user/edit-img", method = RequestMethod.POST)
+    public String uploadFileHandler(HttpServletRequest request, HttpSession session,
+                                    @RequestParam("file") MultipartFile file, Model model) {
+        //通过session获取user
+        User user = (User) session.getAttribute("user");
+        // 上传目录
+        String rootPath = request.getServletContext().getRealPath(IMGURL);
+        System.out.println(rootPath);
+        uploadImg.uploadimg(file, user, rootPath);
+        model.addAttribute("user", user);
+        return "/user/index";
     }
 
 }

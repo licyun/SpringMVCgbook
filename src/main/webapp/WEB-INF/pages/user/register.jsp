@@ -9,29 +9,39 @@
     <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
-<c:import url="/WEB-INF/pages/include/user_header.jsp"/>
-    <h1>
-        注册
-    </h1>
-    <form:form modelAttribute="user" method="post" cssClass="wrap">
-        <p>
-            <label>name:</label>
-            <form:input path="name" id="name"/>
-            <form:errors path="name"/>
-        </p>
-        <p>
-            <label>email:</label>
-            <form:input path="email" id="email"/>
-            <form:errors path="email"/>
-        </p>
-        <p>
-            <label>passwd:</label>
-            <form:password path="passwd" id="passwd"/>
-            <form:errors path="passwd"/>
-        </p>
-        <p>
-            <input type="submit" value="提交">
-        </p>
-    </form:form>
+<c:import url="/WEB-INF/pages/include/login_header.jsp"/>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="col-sm-offset-4">用户注册</h1>
+        <form:form modelAttribute="user" method="post" class="form-horizontal" role="form">
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label">用户名</label>
+                <div class="col-sm-4">
+                    <form:input path="name" id="name"/>
+                    <form:errors path="name"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label">邮箱</label>
+                <div class="col-sm-4">
+                    <form:input path="email" id="email"/>
+                    <form:errors path="email"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-offset-2 col-sm-2 control-label">密码</label>
+                <div class="col-sm-4">
+                    <form:password path="passwd" id="passwd"/>
+                    <form:errors path="passwd"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <input type="submit" class="btn btn-primary btn-lg" role="button" value="登录"/>
+                </div>
+            </div>
+        </form:form>
+    </div>
+</div>
 </body>
 </html>

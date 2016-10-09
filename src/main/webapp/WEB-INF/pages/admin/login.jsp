@@ -9,7 +9,13 @@
     <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
-<c:import url="/WEB-INF/pages/include/admin_header.jsp"/>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">留言板</a>
+        </div>
+    </div>
+</nav>
 <div class="jumbotron">
     <div class="container">
         <h1 class="col-sm-offset-4">管理员登录</h1>

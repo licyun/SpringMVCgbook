@@ -9,7 +9,7 @@
     <c:import url="/WEB-INF/pages/include/inc.jsp"/>
 </head>
 <body>
-<c:import url="/WEB-INF/pages/include/user_header.jsp"/>
+<c:import url="/WEB-INF/pages/include/login_header.jsp"/>
 <div class="jumbotron">
     <div class="container">
         <h1 class="col-sm-offset-4">用户登录</h1>

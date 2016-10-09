@@ -13,21 +13,37 @@
 <div class="container">
     <h1>用户管理界面</h1>
     <div>
-        <div class="row">
-            <div class="col-sm-6">用户id：${user.id}</div>
+        <div class="user-left">
+            <c:if test="${user.imgUrl == null}">
+                <img src="/upload/nopic.jpg" width="100" height="100"/>
+            </c:if>
+            <c:if test="${user.imgUrl != null}">
+                <img src="/upload/${user.imgUrl}" width="100" height="100"/>
+            </c:if>
+            <div class="user-left-down">
+                <div>
+                    <a href="/user/edit-img">修改头像</a>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6">用户名：${user.name}</div>
+        <div class="user-right">
+            <div class="user-right-row">
+                <div>用户id：${user.id}</div>
+            </div>
+            <div class="user-right-row">
+                <div>用户名：${user.name}</div>
+            </div>
+            <div class="user-right-row">
+                <div>用户邮箱：${user.email}</div>
+            </div>
+            <div class="user-right-row">
+                <div>用户密码：${user.passwd}</div>
+            </div>
+            <div class="col-sm-offset-2">
+                <a href="/user/edit-${user.id}">修改个人信息</a>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-sm-6">用户邮箱：${user.email}</div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">用户密码：${user.passwd}</div>
-        </div>
-        <div>
-            <a href="/user/edit-${user.id}">修改个人信息</a>
-        </div>
+
     </div>
 
 </div>
