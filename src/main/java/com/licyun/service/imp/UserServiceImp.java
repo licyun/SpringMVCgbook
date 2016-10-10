@@ -60,6 +60,10 @@ public class UserServiceImp implements UserService {
         userDao.deleteUser(user);
     }
 
+    public Integer findUserCount(){
+        return userDao.findUserCount();
+    }
+
     public List<User> findAllUser(){
         return userDao.findAllUser();
     }

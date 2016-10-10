@@ -12,22 +12,32 @@
 <c:import url="/WEB-INF/pages/include/user_header.jsp"/>
 <h1 class="col-sm-offset-1">查看用户留言</h1>
 <div class="container">
-    <div class="col-sm-10">
+    <div class="col-sm-10" id="comments">
         <c:forEach var="message" items="${messages}">
             <div class="comment">
                 <div class="row">
                     <div class="col-sm-10">
-                            ${message[0]}
+                            ${message.message}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2 pull-right">
-                        <a href="/user/deleteMessage-${message[1]}">删除该评论</a>
+                        <a href="/user/deleteMessage-${message.id}">删除该评论</a>
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
+    <div>
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <c:forEach var="i" items="${count}">
+                <li><a href="#">${i}</a></li>
+            </c:forEach>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
 </div>
+
 </body>
 </html>

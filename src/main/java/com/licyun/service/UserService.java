@@ -24,6 +24,8 @@ public interface UserService {
 
     void deleteUser(User user);
 
+    Integer findUserCount();
+
     List<User> findAllUser();
 
     boolean isUserEmailExist(String email);

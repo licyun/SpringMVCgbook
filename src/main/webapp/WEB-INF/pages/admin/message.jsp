@@ -17,12 +17,12 @@
             <div class="comment">
                 <div class="row">
                     <div class="col-sm-10">
-                            ${message[0]}
+                            ${message.message}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2 pull-right">
-                        <a href="/admin/deleteMessage-${id}-${message[1]}">删除该评论</a>
+                        <a href="/admin/deleteMessage-${id}-${message.id}">删除该评论</a>
                     </div>
                 </div>
             </div>

@@ -43,39 +43,56 @@
             </div>
         </form:form>
     </div>
-    <div class="allcomment col-sm-offset-1 col-sm-10">
-            <c:forEach var="message" items="${messages}">
-                <div class="comment">
-                    <div class="comment-img">
-                        <c:if test="${message[0] == null}">
-                            <img src="/upload/nopic.jpg" width="30" height="30">
-                        </c:if>
-                        <c:if test="${message[0] != null}">
-                            <img src="/upload/${message[0]}" width="30" height="30">
-                        </c:if>
-                    </div>
-                    <div class="comment-head">
-                        <div class="row">
-                            <div class="comment-name col-sm-offset-1">
-                                    用户名：${message[1]}
-                            </div>
-                            <div class="comment-date col-sm-offset-1">
-                                    时间：${message[3]}
-                            </div>
-                            <div class="comment-ip col-sm-offset-1">
-                                    IP：${message[4]}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="clear"></div>
-                    <div class="comment-body col-sm-offset-1">
-                            ${message[2]}
-                    </div>
-                </div>
+    <div class="allcomment col-sm-offset-1 col-sm-10" id="comments">
 
-            </c:forEach>
     </div>
 
 </div>
+<script>
+    $(function() {
+        getjson();
+    });
+
+    function getjson() {
+        $.ajax( {
+            type : "get",
+            url : "/json",
+            dataType:"json",
+            success : function(jsondata) {
+                var data=eval(jsondata);
+                var length = data.length;
+                for(var i =0; i < length; i++){
+                    var imgUrl;
+                    if(data[i].imgUrl == null)
+                        data[i].imgUrl = "nopic.jpg";
+                    var html =
+                            "<div class='comment'>" +
+                                "<div class='comment-img'>" +
+                                    "<img src='/upload/"+data[i].imgUrl+"' width='30' height='30'>" +
+                                "</div>" +
+                                "<div class='comment-head'>" +
+                                    "<div class='row'>" +
+                                        "<div class='comment-name col-sm-offset-1'>" +
+                                            "用户名：" + data[i].name +
+                                        "</div>" +
+                                        "<div class='comment-date col-sm-offset-1'>" +
+                                            "时间：" + data[i].date +
+                                        "</div>" +
+                                        "<div class='comment-ip col-sm-offset-1'>" +
+                                            "IP：" + data[i].ip +
+                                        "</div>" +
+                                    "</div>" +
+                                "</div>" +
+                                "<div class='clear'></div>" +
+                                "<div class='comment-body col-sm-offset-1'>" +
+                                    data[i].message +
+                                "</div>" +
+                            "</div>";
+                    $("#comments").append(html);
+                }
+            }
+        });
+    }
+</script>
 </body>
 </html>

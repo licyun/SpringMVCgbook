@@ -28,12 +28,17 @@
                 <td>${user.id}</td>
                 <td>${user.name} </td>
                 <td>${user.email} </td>
-                <td><a href="/admin/message-${user.id}">查看</a></td>
-                <td><a href="/admin/edit-${user.id}">编辑</a></td>
-                <td><a href="/admin/delete-${user.id}">删除</a></td>
+                <td><button type="button" class="btn btn-info" onclick="edit('/admin/message-${user.id}')">查看留言</button></td>
+                <td><button type="button" class="btn btn-warning" onclick="edit('/admin/edit-${user.id}')">编辑用户</button></td>
+                <td><button type="button" class="btn btn-danger" onclick="edit('/admin/delete-${user.id}')">删除用户</button></td>
             </tr>
         </c:forEach>
     </table>
 </div>
+<script>
+    function edit(url){
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>

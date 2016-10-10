@@ -2,6 +2,7 @@ package com.licyun.service;
 
 import com.licyun.model.Message;
 import com.licyun.vo.MessageBean;
+import com.licyun.vo.MessageJsonBean;
 
 import java.util.List;
 
@@ -12,15 +13,19 @@ import java.util.List;
  */
 public interface MessageService {
 
-    List<Object[]> findMessagesByUserId(int id);
+    List<Message> findMessagesByUserId(int id);
 
     Message findMessageById(int id);
 
-    List<Object[]> findAllMessage();
+    List<MessageJsonBean> findAllMessage();
 
     void saveMessage(Message message);
 
     void deleteMessage(Message message);
 
     void deleteMessageById(int id);
+
+    Integer findMessageCount();
+
+    String getDate();
 }

@@ -1,5 +1,6 @@
 package com.licyun.controller;
 
+import com.licyun.model.Message;
 import com.licyun.model.User;
 import com.licyun.service.MessageService;
 import com.licyun.util.Validate;
@@ -132,7 +133,7 @@ public class AdminController {
     //查看用户留言
     @RequestMapping(value = "/admin/message-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(Model model, @PathVariable int id){
-        List<Object[]> list = messageService.findMessagesByUserId(id);
+        List<Message> list = messageService.findMessagesByUserId(id);
         model.addAttribute("messages", list);
         model.addAttribute("id", id);
         return "admin/message";

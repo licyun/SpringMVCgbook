@@ -43,6 +43,11 @@ public class UserDaoImp extends BaseDaoImp<User>  implements UserDao {
         getHibernateTemplate().delete(user);
     }
 
+    public Integer findUserCount(){
+        String hql = "select count(*) from User as user";
+        return (Integer)getHibernateTemplate().find(hql).listIterator().next();
+    }
+
     public List<User> findAllUser(){
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         return (List<User>) getHibernateTemplate().findByCriteria(criteria);

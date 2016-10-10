@@ -24,6 +24,8 @@ public interface UserDao {
 
     void deleteUser(User user);
 
+    Integer findUserCount();
+
     List<User> findAllUser();
 
 }

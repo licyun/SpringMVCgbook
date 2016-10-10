@@ -1,14 +1,12 @@
 package com.licyun.controller;
 
-import com.licyun.dao.MessageDao;
 import com.licyun.model.Message;
 import com.licyun.model.User;
 import com.licyun.service.MessageService;
-import com.licyun.util.GetDate;
 import com.licyun.util.UploadImg;
 import com.licyun.util.Validate;
 import com.licyun.service.UserService;
-import com.licyun.vo.MessageBean;
+import com.licyun.vo.MessageJsonBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,9 +35,6 @@ public class UserController {
     private UploadImg uploadImg;
 
     @Autowired
-    private GetDate getDate;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -48,10 +43,10 @@ public class UserController {
     @Autowired
     private MessageService messageService;
 
-    //首页
+    //首页提交留言
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(Model model, HttpSession session){
-        List<Object[]> list = messageService.findAllMessage();
+        List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
         model.addAttribute("message", new Message());
         User sessionUser = (User)session.getAttribute("user");
@@ -70,22 +65,21 @@ public class UserController {
         if(result.hasErrors()){
             return "index";
         }
-        List<Object[]> list = messageService.findAllMessage();
+        List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
         User sessionUser = (User) session.getAttribute("user");
         message.setUserid(sessionUser.getId());
-        message.setDate(getDate.getDate());
+        message.setDate(messageService.getDate());
         message.setIp(request.getRemoteAddr());
         messageService.saveMessage(message);
         return "index";
     }
 
-    @RequestMapping(value = "/gbook", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String gbook(Model model){
-        List<Object[]> list = messageService.findAllMessage();
-
-        model.addAttribute("messages", list);
-        return "gbook";
+    @ResponseBody
+    @RequestMapping(value = "/json", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public List<MessageJsonBean> json(){
+        List<MessageJsonBean> list = messageService.findAllMessage();
+        return list;
     }
 
     //用户首页
@@ -100,12 +94,14 @@ public class UserController {
         return "/user/index";
     }
 
-    //用户评论
+    //查看用户评论
     @RequestMapping(value = "/user/message", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(HttpSession session, Model model){
         User user = (User)session.getAttribute("user");
-        List<Object[]> list = messageService.findMessagesByUserId(user.getId());
+        List<Message> list = messageService.findMessagesByUserId(user.getId());
         model.addAttribute("messages", list);
+        model.addAttribute("id", user.getId());
+        model.addAttribute("count", messageService.findMessageCount());
         return "/user/message";
     }
 
@@ -115,7 +111,7 @@ public class UserController {
                                 @PathVariable int mid){
         User user = (User)session.getAttribute("user");
         messageService.deleteMessageById(mid);
-        List<Object[]> list = messageService.findMessagesByUserId(user.getId());
+        List<Message> list = messageService.findMessagesByUserId(user.getId());
         model.addAttribute("messages", list);
         return "/user/message";
     }
