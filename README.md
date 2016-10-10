@@ -1,5 +1,4 @@
-###springMVC + Hibernate开发的留言管理系统
-###前端界面使用bootstrap， 分页功能使用hibernateTemplate配合ajax传递的json数组进行解析分页。
+###springMVC + Hibernate + bootstrap + ajax开发的留言管理系统
 ##演示站[http://java.licyun.com/gbook](http://java.licyun.com/gbook)
 ##功能介绍：
 - 系统分为2个角色，用户和管理员。
@@ -19,4 +18,9 @@
 - web.xml  注册SpringMVC默认dispacher转发器及mvc-dispacher-servlet.xml，添加hibernate拦截器，设置输入编码和application.xml hibernate配置文件。
 - mvc-dispacher-servlet.xml 扫描包注册bean的自动装载，配置国际化资源，返回对应物理逻辑视图，配置上传文件大小和格式，配置静态文件访问，配置intercepter拦截器实现用户和管理员登录拦截。
 - application.xml 扫描除Controller外的bean包自动装载,配置C3P0数据源连接数据库信息，定义sessionFactory工厂并为其注入datasouce数据源，定义gethibernate数据库操作类 和 transaction事务管理 并为其注入SessionFactory， 声明事务采用注解方式。
+
+##首页分页说明
+- 首页采用ajax获取json分页数据，让更多业务逻辑在客户端处理，减少服务器压力。
+- messageDao层使用抽象类BaseDao的的分页查询，并配置jackson包返回json对象的分页数据。
+- 通过js获取首页所有分页class属性，并通过js闭包循环为页面a标签添加监听。
 
