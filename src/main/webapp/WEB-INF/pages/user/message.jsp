@@ -28,15 +28,8 @@
             </div>
         </c:forEach>
     </div>
-    <div>
-        <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <c:forEach var="i" items="${count}">
-                <li><a href="#">${i}</a></li>
-            </c:forEach>
-            <li><a href="#">&raquo;</a></li>
-        </ul>
-    </div>
+    <div class="clear"></div>
+
 </div>
 
 </body>

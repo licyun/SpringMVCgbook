@@ -1,6 +1,7 @@
 package com.licyun.dao;
 
 import com.licyun.model.User;
+import com.licyun.vo.MessageJsonBean;
 
 import java.util.List;
 
@@ -24,8 +25,9 @@ public interface UserDao {
 
     void deleteUser(User user);
 
-    Integer findUserCount();
+    Long findUserCount();
 
     List<User> findAllUser();
+
 
 }

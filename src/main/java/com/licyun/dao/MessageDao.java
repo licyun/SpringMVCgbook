@@ -21,5 +21,7 @@ public interface MessageDao {
 
     void deleteMessage(Message message);
 
-    Integer findMessageCount();
+    Long findMessageCount();
+
+    List<MessageJsonBean> findMessageByPage(final int pageNo,final int pageSize );
 }

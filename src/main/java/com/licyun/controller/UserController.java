@@ -49,6 +49,7 @@ public class UserController {
         List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
         model.addAttribute("message", new Message());
+        model.addAttribute("pageCount", Math.ceil(messageService.findMessageCount() / 5));
         User sessionUser = (User)session.getAttribute("user");
         if(sessionUser != null){
             model.addAttribute("user", sessionUser);
@@ -59,8 +60,9 @@ public class UserController {
         return "index";
     }
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST})
-    public String index(@Valid Message message,BindingResult result,
-                        Model model, HttpSession session, HttpServletRequest request) {
+    public String index(@Valid Message message,BindingResult result, Model model,
+                        HttpSession session, HttpServletRequest request,
+                        HttpServletResponse response) throws Exception{
         validate.messageValidate(message, result);
         if(result.hasErrors()){
             return "index";
@@ -73,12 +75,13 @@ public class UserController {
         message.setIp(request.getRemoteAddr());
         messageService.saveMessage(message);
         return "index";
+//        response.sendRedirect("/");
     }
 
     @ResponseBody
-    @RequestMapping(value = "/json", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public List<MessageJsonBean> json(){
-        List<MessageJsonBean> list = messageService.findAllMessage();
+    @RequestMapping(value = "/messageJson-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public List<MessageJsonBean> json(@PathVariable int page){
+        List<MessageJsonBean> list = messageService.findMessageByPage(page, 5);
         return list;
     }
 
@@ -95,13 +98,13 @@ public class UserController {
     }
 
     //查看用户评论
-    @RequestMapping(value = "/user/message", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String message(HttpSession session, Model model){
+    @RequestMapping(value = "/user/message-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String message(HttpSession session, Model model, @PathVariable int page){
         User user = (User)session.getAttribute("user");
         List<Message> list = messageService.findMessagesByUserId(user.getId());
         model.addAttribute("messages", list);
         model.addAttribute("id", user.getId());
-        model.addAttribute("count", messageService.findMessageCount());
+        model.addAttribute("count", Math.ceil(messageService.findMessageCount()/8));
         return "/user/message";
     }
 

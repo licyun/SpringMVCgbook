@@ -3,6 +3,7 @@ package com.licyun.service.imp;
 import com.licyun.dao.UserDao;
 import com.licyun.service.UserService;
 import com.licyun.model.User;
+import com.licyun.vo.MessageJsonBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,7 +61,7 @@ public class UserServiceImp implements UserService {
         userDao.deleteUser(user);
     }
 
-    public Integer findUserCount(){
+    public Long findUserCount(){
         return userDao.findUserCount();
     }
 

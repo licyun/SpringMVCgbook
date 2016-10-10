@@ -25,7 +25,9 @@ public interface MessageService {
 
     void deleteMessageById(int id);
 
-    Integer findMessageCount();
+    Long findMessageCount();
 
     String getDate();
+
+    List<MessageJsonBean> findMessageByPage(int pageNo,int pageSize );
 }

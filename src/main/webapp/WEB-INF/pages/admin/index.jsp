@@ -14,13 +14,13 @@
 <div class="container">
     <table class="table">
         <thead>
-        <td>用户头像</td>
-        <td>用户ID</td>
-        <td>用户名</td>
-        <td>用户邮箱</td>
-        <td>查看该用户留言</td>
-        <td>编辑该用户</td>
-        <td>删除该用户</td>
+            <td>用户头像</td>
+            <td>用户ID</td>
+            <td>用户名</td>
+            <td>用户邮箱</td>
+            <td>查看该用户留言</td>
+            <td>编辑该用户</td>
+            <td>删除该用户</td>
         </thead>
         <c:forEach var="user" items="${users}">
             <tr>

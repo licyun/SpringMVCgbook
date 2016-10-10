@@ -2,7 +2,11 @@ package com.licyun.dao.imp;
 
 import com.licyun.dao.UserDao;
 import com.licyun.model.User;
+import com.licyun.vo.MessageJsonBean;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
+import org.springframework.orm.hibernate4.HibernateCallback;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,13 +47,15 @@ public class UserDaoImp extends BaseDaoImp<User>  implements UserDao {
         getHibernateTemplate().delete(user);
     }
 
-    public Integer findUserCount(){
+    public Long findUserCount(){
         String hql = "select count(*) from User as user";
-        return (Integer)getHibernateTemplate().find(hql).listIterator().next();
+        return (Long)getHibernateTemplate().find(hql).listIterator().next();
     }
 
     public List<User> findAllUser(){
         DetachedCriteria criteria = DetachedCriteria.forClass(User.class);
         return (List<User>) getHibernateTemplate().findByCriteria(criteria);
     }
+
+
 }

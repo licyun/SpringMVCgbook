@@ -46,19 +46,39 @@
     <div class="allcomment col-sm-offset-1 col-sm-10" id="comments">
 
     </div>
-
+    <div class="col-sm-offset-1">
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <c:forEach begin="1" end="${pageCount}" var="v" >
+                <li><a class="pages" >${v}</a></li>
+            </c:forEach>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
 </div>
 <script>
+    var pages = document.getElementsByClassName('pages');
+    console.log(pages.length);
+    for (var i = 0; i < pages.length; i++) {
+        (function(i){
+            pages[i].onclick = function(){
+                getjson(i+1);
+            }
+        })(i);
+    }
+</script>
+<script>
     $(function() {
-        getjson();
+        getjson(1);
     });
 
-    function getjson() {
+    function getjson(i) {
         $.ajax( {
             type : "get",
-            url : "/json",
+            url : "/messageJson-"+i,
             dataType:"json",
             success : function(jsondata) {
+                $("#comments").empty();
                 var data=eval(jsondata);
                 var length = data.length;
                 for(var i =0; i < length; i++){

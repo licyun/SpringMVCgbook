@@ -36,14 +36,9 @@ public class AdminController {
     private MessageService messageService;
 
     //管理员首页
-    @RequestMapping(value = "/admin", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String admin(HttpSession session, Model model){
-        //判断session
-        User sessionUser = (User)session.getAttribute("admin");
-        if(sessionUser != null){
-            model.addAttribute("users", userService.findAllUser());
-            return "admin/index";
-        }
+    @RequestMapping(value = "/admin-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public String admin(@PathVariable int page, Model model){
+        model.addAttribute("count", Math.ceil(userService.findUserCount()/5));
         model.addAttribute("users", userService.findAllUser());
         return "admin/index";
     }
@@ -131,7 +126,7 @@ public class AdminController {
     }
 
     //查看用户留言
-    @RequestMapping(value = "/admin/message-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = {"/admin/message-{id}"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(Model model, @PathVariable int id){
         List<Message> list = messageService.findMessagesByUserId(id);
         model.addAttribute("messages", list);

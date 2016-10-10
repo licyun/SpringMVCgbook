@@ -48,8 +48,12 @@ public class MessageServiceImp implements MessageService{
         deleteMessage(findMessageById(id));
     }
 
-    public Integer findMessageCount(){
+    public Long findMessageCount(){
         return messageDao.findMessageCount();
+    }
+
+    public List<MessageJsonBean> findMessageByPage(int pageNo,int pageSize ){
+        return messageDao.findMessageByPage(pageNo, pageSize);
     }
 
     public String getDate(){
