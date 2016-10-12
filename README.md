@@ -1,9 +1,12 @@
 ###springMVC + Hibernate + bootstrap + ajax开发的留言管理系统
 ##演示站[http://java.licyun.com/gbook](http://java.licyun.com/gbook)
+    [用户登录](http://java.licyun.com/gbook/user/login) 用户帐号：849528477@qq.com  密码：123456
+    
+    [管理员登录](http://java.licyun.com/gbook/admin/login) 管理员帐号： mzkwy@outlook.com 密码：123456
 ##功能介绍：
 - 系统分为2个角色，用户和管理员。
 - 用户 ：未注册用户可以观看所有留言，但是提交留言需要注册登录，登录后可以修改个人信息：邮箱，用户名，头像和密码。
-- 管理员：管理员可以删除留言和用户，同时也可以编辑用户信息。
+- 管理员：管理员和用户和用户公用一张表，只不过管理员在表中的type字段为2，用户的type字段为1，管理员可以删除用户和留言，同时也可以编辑用户信息。
 
 ##系统结构：
 - controller:控制层 AdminController和UserController分别控制管理员和用户的请求转发。
