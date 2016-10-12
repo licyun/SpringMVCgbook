@@ -3,7 +3,7 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand col-sm-offset-1" href="/">留言板</a>
+            <a class="navbar-brand col-sm-offset-1" href="${pageContext.request.contextPath}/">留言板</a>
         </div>
     </div>
 </nav>

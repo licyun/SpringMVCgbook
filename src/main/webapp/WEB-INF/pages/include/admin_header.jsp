@@ -7,10 +7,10 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/admin/login">登录</a></li>
-                <li><a href="/admin/add">添加用户</a></li>
-                <li><a href="/admin/users-1">查看所有用户</a></li>
-                <li><a href="/user/loginout">退出</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/login">登录</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/add">添加用户</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/users-1">查看所有用户</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/loginout">退出</a></li>
             </ul>
         </div>
     </div>

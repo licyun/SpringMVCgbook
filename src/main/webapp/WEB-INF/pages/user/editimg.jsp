@@ -22,7 +22,7 @@
         </c:if>
     </div>
     <div class="user-right">
-        <form method="POST" action="/user/edit-img" enctype="multipart/form-data" role="form">
+        <form method="POST" action="${pageContext.request.contextPath}/user/edit-img" enctype="multipart/form-data" role="form">
             <div class="form-group">
                 <label>File to upload: </label>
                 <input type="file" name="file"><br />

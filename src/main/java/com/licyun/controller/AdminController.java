@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -40,7 +41,7 @@ public class AdminController {
     private MessageService messageService;
 
     //管理员首页
-    @RequestMapping(value = "/admin/users-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "admin/users-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String admin(@PathVariable int page, Model model){
         //计算总页面数
         model.addAttribute("count", (int)( Math.ceil(userService.findUserCount() / FPAGENUM) ));
@@ -49,7 +50,7 @@ public class AdminController {
     }
 
     //管理员登录
-    @RequestMapping(value = "/admin/login",method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = {"admin/login"},method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(HttpSession session, Model model){
         //判断session
         User sessionUser = (User)session.getAttribute("admin");
@@ -61,7 +62,7 @@ public class AdminController {
         model.addAttribute(new User());
         return "admin/login";
     }
-    @RequestMapping(value = "/admin/login",method = {RequestMethod.POST, RequestMethod.HEAD})
+    @RequestMapping(value = {"admin/login"},method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
         //验证
@@ -76,15 +77,16 @@ public class AdminController {
     }
 
     //退出登录
-    @RequestMapping(value = "/admin/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public void loginOut(HttpSession session, HttpServletResponse response) throws Exception{
+    @RequestMapping(value = "admin/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void loginOut(HttpSession session, HttpServletResponse response,
+                         HttpServletRequest request) throws Exception{
         //清空session
         session.invalidate();
-        response.sendRedirect("/admin/login");
+        response.sendRedirect(request.getContextPath() +"/admin/login");
     }
 
     //增加管理员
-    @RequestMapping(value = "/admin/add", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "admin/add", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String addUser(Model model){
         model.addAttribute("user",new User());
         return "admin/add";
@@ -99,25 +101,26 @@ public class AdminController {
         //管理员的Type为2，普通用户的type为1
         user.setType(2);
         userService.saveUser(user);
-        model.addAttribute("users", userService.findAllUser());
+        model.addAttribute("users", userService.findUserByPage(1, PAGENUM));
+        model.addAttribute("count", (int) (Math.ceil(userService.findUserCount() / FPAGENUM)));
         return "admin/index";
     }
 
     //删除用户
-    @RequestMapping(value = "/admin/delete-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String deleteUser(@PathVariable int id, Model model){
+    @RequestMapping(value = "admin/delete-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void deleteUser(@PathVariable int id, HttpServletResponse response,
+                           HttpServletRequest request) throws Exception{
         userService.deleteUser(userService.findById(id));
-        model.addAttribute("users", userService.findAllUser());
-        return "admin/index";
+        response.sendRedirect(request.getContextPath() + "/admin/users-1");
     }
 
     //修改用户
-    @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "admin/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String editUser(@PathVariable int id,Model model){
         model.addAttribute("user",userService.findById(id));
         return "admin/edit";
     }
-    @RequestMapping(value = "/admin/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
+    @RequestMapping(value = "admin/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String editUser(@Valid User user, @PathVariable int id,
                            BindingResult result, Model model){
         //验证输入格式
@@ -130,12 +133,13 @@ public class AdminController {
         sqlUser.setName(user.getName());
         sqlUser.setPasswd(user.getPasswd());
         userService.updateUser(sqlUser);
-        model.addAttribute("users", userService.findAllUser());
+        model.addAttribute("users", userService.findUserByPage(1, PAGENUM));
+        model.addAttribute("count", (int)( Math.ceil(userService.findUserCount() / FPAGENUM) ));
         return "admin/index";
     }
 
     //查看用户留言
-    @RequestMapping(value = {"/admin/message-{id}"}, method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = {"admin/message-{id}"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(Model model, @PathVariable int id){
         List<Message> list = messageService.findMessagesByUserId(id);
         model.addAttribute("messages", list);
@@ -144,10 +148,10 @@ public class AdminController {
     }
 
     //删除用户留言
-    @RequestMapping(value = "/admin/deleteMessage-{uid}-{mid}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "admin/deleteMessage-{uid}-{mid}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public void deleteMessage(@PathVariable int mid, @PathVariable int uid,
-                              HttpServletResponse response) throws Exception{
+                              HttpServletResponse response, HttpServletRequest request) throws Exception{
         messageService.deleteMessageById(mid);
-        response.sendRedirect("/admin/message-"+uid);
+        response.sendRedirect(request.getContextPath() + "admin/message-"+uid);
     }
 }

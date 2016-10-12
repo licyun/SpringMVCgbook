@@ -47,7 +47,7 @@ public class UserController {
     private MessageService messageService;
 
     //首页提交留言
-    @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = {"/", "index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(Model model, HttpSession session){
         List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
@@ -105,7 +105,7 @@ public class UserController {
             return "user/index";
         }
         model.addAttribute("user", new User());
-        return "/user/index";
+        return "user/index";
     }
 
     //查看用户评论
@@ -116,7 +116,7 @@ public class UserController {
         model.addAttribute("messages", list);
         model.addAttribute("id", user.getId());
         model.addAttribute("count", (int)( Math.ceil(messageService.findMessageCount() / PAGENUM) ));
-        return "/user/message";
+        return "user/message";
     }
 
     //删除用户评论
@@ -127,7 +127,7 @@ public class UserController {
         messageService.deleteMessageById(mid);
         List<Message> list = messageService.findMessagesByUserId(user.getId());
         model.addAttribute("messages", list);
-        return "/user/message";
+        return "user/message-1";
     }
 
     //注册
@@ -137,13 +137,15 @@ public class UserController {
         return "user/register";
     }
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.POST, RequestMethod.HEAD})
-    public String register(@Valid  User user,BindingResult result){
+    public String register(@Valid  User user,BindingResult result,
+                           HttpSession session){
         validate.registValidate(user, result);
         if(result.hasErrors()){
             return "user/register";
         }
         user.setType(1);
         userService.saveUser(user);
+        session.setAttribute("user", user);
         return "user/index";
     }
 
@@ -174,17 +176,18 @@ public class UserController {
 
     //退出登录
     @RequestMapping(value = "/user/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public void loginOut(HttpSession session, HttpServletResponse response) throws Exception{
+    public void loginOut(HttpSession session, HttpServletResponse response,
+                         HttpServletRequest request) throws Exception{
         //清空session
         session.invalidate();
-        response.sendRedirect("/user/login");
+        response.sendRedirect(request.getContextPath() +"/user/login");
     }
 
     //编辑
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
          public String edit(@PathVariable int id, Model model){
         User user = userService.findById(id);
-        model.addAttribute("user", user);
+        model.addAttribute("user/user", user);
         return "user/edit";
     }
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
@@ -206,7 +209,7 @@ public class UserController {
     public String uploadOneFileHandler(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
-        return "/user/editimg";
+        return "user/editimg";
     }
     @RequestMapping(value = "/user/edit-img", method = RequestMethod.POST)
     public String uploadFileHandler(HttpServletRequest request, HttpSession session,
@@ -217,7 +220,7 @@ public class UserController {
         System.out.println(rootPath);
         uploadImg.uploadimg(file, user, rootPath);
         model.addAttribute("user", user);
-        return "/user/index";
+        return "user/index";
     }
 
 }

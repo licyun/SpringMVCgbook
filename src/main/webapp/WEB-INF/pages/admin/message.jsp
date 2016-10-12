@@ -22,7 +22,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-2 pull-right">
-                        <a href="/admin/deleteMessage-${id}-${message.id}">删除该评论</a>
+                        <a href="${pageContext.request.contextPath}/admin/deleteMessage-${id}-${message.id}">删除该评论</a>
                     </div>
                 </div>
             </div>

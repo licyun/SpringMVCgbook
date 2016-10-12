@@ -28,9 +28,9 @@
                 <td>${user.id}</td>
                 <td>${user.name} </td>
                 <td>${user.email} </td>
-                <td><button type="button" class="btn btn-info" onclick="edit('/admin/message-${user.id}')">查看留言</button></td>
-                <td><button type="button" class="btn btn-warning" onclick="edit('/admin/edit-${user.id}')">编辑用户</button></td>
-                <td><button type="button" class="btn btn-danger" onclick="edit('/admin/delete-${user.id}')">删除用户</button></td>
+                <td><button type="button" class="btn btn-info" onclick="edit('${pageContext.request.contextPath}/admin/message-${user.id}')">查看留言</button></td>
+                <td><button type="button" class="btn btn-warning" onclick="edit('${pageContext.request.contextPath}/admin/edit-${user.id}')">编辑用户</button></td>
+                <td><button type="button" class="btn btn-danger" onclick="edit('${pageContext.request.contextPath}/admin/delete-${user.id}')">删除用户</button></td>
             </tr>
         </c:forEach>
     </table>
@@ -38,7 +38,7 @@
         <ul class="pagination">
             <li><a href="#">&laquo;</a></li>
             <c:forEach begin="1" end="${count}" var="v" >
-                <li><a class="pages" href="/admin/users-${v}">${v}</a></li>
+                <li><a class="pages" href="${pageContext.request.contextPath}/admin/users-${v}">${v}</a></li>
             </c:forEach>
             <li><a href="#">&raquo;</a></li>
         </ul>

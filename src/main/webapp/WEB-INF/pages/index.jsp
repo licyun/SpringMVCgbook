@@ -33,9 +33,9 @@
                     <c:if test="${ifLogin==false}">
                         <div class="col-sm-offset-6">
                             您还未登录，请先
-                            <a href="/user/login">登录</a>
+                            <a href="${pageContext.request.contextPath}/user/login">登录</a>
                             或
-                            <a href="/user/register">注册</a>
+                            <a href="${pageContext.request.contextPath}/user/register">注册</a>
                         </div>
                     </c:if>
                 </div>
@@ -81,6 +81,6 @@
         getjson(currentpage);
     }
 </script>
-<script src="/static/pagejson.js"></script>
+<script src="${pageContext.request.contextPath}/static/pagejson.js"></script>
 </body>
 </html>

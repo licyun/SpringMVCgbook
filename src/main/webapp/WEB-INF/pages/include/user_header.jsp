@@ -7,10 +7,10 @@
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li><a href="/">留言</a></li>
-                <li><a href="/user">修改信息</a></li>
-                <li><a href="/user/message-1">查看评论</a></li>
-                <li><a href="/user/loginout">退出</a></li>
+                <li><a href="${pageContext.request.contextPath}/">留言</a></li>
+                <li><a href="${pageContext.request.contextPath}/user">修改信息</a></li>
+                <li><a href="${pageContext.request.contextPath}/user/message-1">查看评论</a></li>
+                <li><a href="${pageContext.request.contextPath}/user/loginout">退出</a></li>
             </ul>
         </div>
     </div>
