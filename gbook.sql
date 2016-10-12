@@ -19,6 +19,11 @@
 -- Table structure for table `message`
 --
 
+DROP DATABASE if exists gbook;
+CREATE DATABASE gbook DEFAULT CHARACTER SET utf8;
+
+use gbook;
+
 DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
