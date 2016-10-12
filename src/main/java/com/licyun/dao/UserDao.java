@@ -29,5 +29,6 @@ public interface UserDao {
 
     List<User> findAllUser();
 
+    List<User> findUserByPage(int pageNo, int pageSize);
 
 }

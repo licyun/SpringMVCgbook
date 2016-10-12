@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
@@ -22,14 +21,14 @@
         <form:form modelAttribute="message" method="post" role="form">
             <div class="form-group">
                     <div class="col-sm-12">
-                        <form:textarea path="message" class="form-control" rows="3"/>
+                        <form:textarea path="message" id="message" class="form-control" rows="3"/>
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-8">
                     <c:if test="${ifLogin==true}">
-                        <input type="submit" class="btn btn-default col-sm-offset-8" value="提交留言"/>
+                        <input type="submit" class="btn btn-default col-sm-offset-8 submit-top" value="提交留言"/>
                     </c:if>
                     <c:if test="${ifLogin==false}">
                         <div class="col-sm-offset-6">
@@ -46,19 +45,19 @@
     <div class="allcomment col-sm-offset-1 col-sm-10" id="comments">
 
     </div>
-    <div class="col-sm-offset-1">
+    <div class="col-sm-offset-2">
         <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
+            <li><a id="page-before" href="#!">&laquo;</a></li>
             <c:forEach begin="1" end="${pageCount}" var="v" >
-                <li><a class="pages" >${v}</a></li>
+                <li><a class="pages" href="#!">${v}</a></li>
             </c:forEach>
-            <li><a href="#">&raquo;</a></li>
+            <li><a id="page-after" href="#!">&raquo;</a></li>
         </ul>
     </div>
 </div>
 <script>
+    //闭包循环为分页标签添加监听事件
     var pages = document.getElementsByClassName('pages');
-    console.log(pages.length);
     for (var i = 0; i < pages.length; i++) {
         (function(i){
             pages[i].onclick = function(){
@@ -66,53 +65,22 @@
             }
         })(i);
     }
-</script>
-<script>
-    $(function() {
-        getjson(1);
-    });
-
-    function getjson(i) {
-        $.ajax( {
-            type : "get",
-            url : "/messageJson-"+i,
-            dataType:"json",
-            success : function(jsondata) {
-                $("#comments").empty();
-                var data=eval(jsondata);
-                var length = data.length;
-                for(var i =0; i < length; i++){
-                    var imgUrl;
-                    if(data[i].imgUrl == null)
-                        data[i].imgUrl = "nopic.jpg";
-                    var html =
-                            "<div class='comment'>" +
-                                "<div class='comment-img'>" +
-                                    "<img src='/upload/"+data[i].imgUrl+"' width='30' height='30'>" +
-                                "</div>" +
-                                "<div class='comment-head'>" +
-                                    "<div class='row'>" +
-                                        "<div class='comment-name col-sm-offset-1'>" +
-                                            "用户名：" + data[i].name +
-                                        "</div>" +
-                                        "<div class='comment-date col-sm-offset-1'>" +
-                                            "时间：" + data[i].date +
-                                        "</div>" +
-                                        "<div class='comment-ip col-sm-offset-1'>" +
-                                            "IP：" + data[i].ip +
-                                        "</div>" +
-                                    "</div>" +
-                                "</div>" +
-                                "<div class='clear'></div>" +
-                                "<div class='comment-body col-sm-offset-1'>" +
-                                    data[i].message +
-                                "</div>" +
-                            "</div>";
-                    $("#comments").append(html);
-                }
-            }
-        });
+    var pagebefore = document.getElementById("page-before");
+    var pageafter = document.getElementById("page-after");
+    var currentpage = 1;
+    //上一页添加监听
+    pagebefore.onclick = function(){
+        if(currentpage != 1)
+            currentpage = currentpage - 1;
+        getjson(currentpage);
+    }
+    //下一页添加监听
+    pageafter.onclick = function(){
+        if(currentpage != ${pageCount})
+            currentpage = currentpage + 1;
+        getjson(currentpage);
     }
 </script>
+<script src="/static/pagejson.js"></script>
 </body>
 </html>

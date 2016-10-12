@@ -34,6 +34,15 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="col-sm-offset-2">
+        <ul class="pagination">
+            <li><a href="#">&laquo;</a></li>
+            <c:forEach begin="1" end="${count}" var="v" >
+                <li><a class="pages" href="/admin/users-${v}">${v}</a></li>
+            </c:forEach>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
 </div>
 <script>
     function edit(url){

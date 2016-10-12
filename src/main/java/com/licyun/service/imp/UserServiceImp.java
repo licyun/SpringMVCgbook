@@ -69,6 +69,10 @@ public class UserServiceImp implements UserService {
         return userDao.findAllUser();
     }
 
+    public List<User> findUserByPage(int pageNo, int pageSize){
+        return userDao.findUserByPage(pageNo, pageSize);
+    }
+
     public boolean isUserEmailExist(String email){
         List<User> users = findAllUser();
         for(User user : users){

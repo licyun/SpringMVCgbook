@@ -26,6 +26,10 @@ import java.util.List;
 @Controller
 public class AdminController {
 
+    //每页包含数量
+    private final int PAGENUM = 5;
+    private final float FPAGENUM = 5.0f;
+
     @Autowired
     private UserService userService;
 
@@ -36,10 +40,11 @@ public class AdminController {
     private MessageService messageService;
 
     //管理员首页
-    @RequestMapping(value = "/admin-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
+    @RequestMapping(value = "/admin/users-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String admin(@PathVariable int page, Model model){
-        model.addAttribute("count", Math.ceil(userService.findUserCount()/5));
-        model.addAttribute("users", userService.findAllUser());
+        //计算总页面数
+        model.addAttribute("count", (int)( Math.ceil(userService.findUserCount() / FPAGENUM) ));
+        model.addAttribute("users", userService.findUserByPage(page, PAGENUM));
         return "admin/index";
     }
 
@@ -49,7 +54,8 @@ public class AdminController {
         //判断session
         User sessionUser = (User)session.getAttribute("admin");
         if(sessionUser != null){
-            model.addAttribute("users", userService.findAllUser());
+            model.addAttribute("users", userService.findUserByPage(1, PAGENUM));
+            model.addAttribute("count", (int)( Math.ceil(userService.findUserCount() / FPAGENUM) ));
             return "admin/index";
         }
         model.addAttribute(new User());
@@ -64,13 +70,15 @@ public class AdminController {
             return "admin/login";
         }
         session.setAttribute("admin", user);
-        model.addAttribute("users", userService.findAllUser());
+        model.addAttribute("users", userService.findUserByPage(1, PAGENUM));
+        model.addAttribute("count", (int)( Math.ceil(userService.findUserCount() / FPAGENUM) ));
         return "admin/index";
     }
 
     //退出登录
     @RequestMapping(value = "/admin/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
     public void loginOut(HttpSession session, HttpServletResponse response) throws Exception{
+        //清空session
         session.invalidate();
         response.sendRedirect("/admin/login");
     }
@@ -88,6 +96,7 @@ public class AdminController {
         if(result.hasErrors()){
             return "admin/add";
         }
+        //管理员的Type为2，普通用户的type为1
         user.setType(2);
         userService.saveUser(user);
         model.addAttribute("users", userService.findAllUser());

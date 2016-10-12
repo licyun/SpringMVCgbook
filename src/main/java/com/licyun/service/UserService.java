@@ -28,6 +28,8 @@ public interface UserService {
 
     Long findUserCount();
 
+    List<User> findUserByPage(int pageNo, int pageSize);
+
     List<User> findAllUser();
 
     boolean isUserEmailExist(String email);

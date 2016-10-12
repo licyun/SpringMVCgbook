@@ -30,6 +30,9 @@ public class UserController {
 
     //图片路径
     private final String IMGURL = "/WEB-INF/upload";
+    //每页数量
+    private final int PAGENUM = 5;
+    private final float FPAGENUM = 5.0f;
 
     @Autowired
     private UploadImg uploadImg;
@@ -49,8 +52,11 @@ public class UserController {
         List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
         model.addAttribute("message", new Message());
-        model.addAttribute("pageCount", Math.ceil(messageService.findMessageCount() / 5));
+        //计算出页数并返回给前台
+        model.addAttribute("pageCount", (int)( Math.ceil(messageService.findMessageCount() / FPAGENUM) ));
+        //获取session中的user
         User sessionUser = (User)session.getAttribute("user");
+        //但session中存在user时，允许留言
         if(sessionUser != null){
             model.addAttribute("user", sessionUser);
             model.addAttribute("ifLogin", true);
@@ -63,25 +69,30 @@ public class UserController {
     public String index(@Valid Message message,BindingResult result, Model model,
                         HttpSession session, HttpServletRequest request,
                         HttpServletResponse response) throws Exception{
+        //验证留言信息是否正确
         validate.messageValidate(message, result);
         if(result.hasErrors()){
             return "index";
         }
         List<MessageJsonBean> list = messageService.findAllMessage();
         model.addAttribute("messages", list);
+        //计算出页数并返回给前台
+        model.addAttribute("pageCount", (int)( Math.ceil(messageService.findMessageCount() / FPAGENUM) ));
+        //信息正确则将留言信息set给message对象，调用messageService保存留言
         User sessionUser = (User) session.getAttribute("user");
         message.setUserid(sessionUser.getId());
         message.setDate(messageService.getDate());
         message.setIp(request.getRemoteAddr());
         messageService.saveMessage(message);
+        model.addAttribute("ifLogin", true);
         return "index";
-//        response.sendRedirect("/");
     }
 
+    //根据页面返回对应的json数组
     @ResponseBody
     @RequestMapping(value = "/messageJson-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public List<MessageJsonBean> json(@PathVariable int page){
-        List<MessageJsonBean> list = messageService.findMessageByPage(page, 5);
+        List<MessageJsonBean> list = messageService.findMessageByPage(page, PAGENUM);
         return list;
     }
 
@@ -104,7 +115,7 @@ public class UserController {
         List<Message> list = messageService.findMessagesByUserId(user.getId());
         model.addAttribute("messages", list);
         model.addAttribute("id", user.getId());
-        model.addAttribute("count", Math.ceil(messageService.findMessageCount()/8));
+        model.addAttribute("count", (int)( Math.ceil(messageService.findMessageCount() / PAGENUM) ));
         return "/user/message";
     }
 
@@ -164,6 +175,7 @@ public class UserController {
     //退出登录
     @RequestMapping(value = "/user/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
     public void loginOut(HttpSession session, HttpServletResponse response) throws Exception{
+        //清空session
         session.invalidate();
         response.sendRedirect("/user/login");
     }
@@ -192,7 +204,6 @@ public class UserController {
     // 修改图片
     @RequestMapping(value = "/user/edit-img", method = RequestMethod.GET)
     public String uploadOneFileHandler(HttpSession session, Model model) {
-        //通过session获取user
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
         return "/user/editimg";
@@ -200,7 +211,6 @@ public class UserController {
     @RequestMapping(value = "/user/edit-img", method = RequestMethod.POST)
     public String uploadFileHandler(HttpServletRequest request, HttpSession session,
                                     @RequestParam("file") MultipartFile file, Model model) {
-        //通过session获取user
         User user = (User) session.getAttribute("user");
         // 上传目录
         String rootPath = request.getServletContext().getRealPath(IMGURL);

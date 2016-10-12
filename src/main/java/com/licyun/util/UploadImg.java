@@ -43,7 +43,7 @@ public class UploadImg {
                 // 创建跨平台的路径
                 File serverFile = new File(uploadRootDir.getAbsolutePath()
                         + File.separator + name);
-                // Stream to write data to file in server.
+                // 创建输入，输出流
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(serverFile));
                 stream.write(bytes);

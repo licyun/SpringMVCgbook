@@ -83,6 +83,7 @@
     <!-- 事务采用声明方式 -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
+    <!-- 若不用上面的声明方式，可采用下面的方式 -->
     <!--&lt;!&ndash; 基本事务定义，使用transactionManager做事务管理，默认get*，find*方法的事务为read-only &ndash;&gt;-->
     <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
         <!--<tx:attributes>-->

@@ -22,6 +22,7 @@ public class Validate {
     @Autowired
     private UserService userService;
 
+    //公共验证规则
     public void commonValidate(User user, Errors errors) {
         //判断用户名和邮箱是否为空
         if(user.getName() != "" && user.getEmail() != ""){
@@ -43,6 +44,7 @@ public class Validate {
         }
     }
 
+    //注册验证
     public void registValidate(User user, Errors errors){
         commonValidate(user, errors);
         //判断name格式是否正确
@@ -55,6 +57,7 @@ public class Validate {
         }
     }
 
+    //登录验证
     public void loginValidate(User user, Errors errors){
         commonValidate(user, errors);
         User sqlUser = userService.findByEmail(user.getEmail());
@@ -69,6 +72,7 @@ public class Validate {
         }
     }
 
+    //修改验证
     public void updateValidate(User user, int id, Errors errors){
         commonValidate(user, errors);
         User sqlUser = userService.findById(id);
@@ -77,6 +81,7 @@ public class Validate {
         }
     }
 
+    //留言验证
     public void messageValidate(Message message, Errors errors){
         if(message.getMessage() != ""){
             if(message.getMessage().length() < 255){

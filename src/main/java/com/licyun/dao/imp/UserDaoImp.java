@@ -57,5 +57,8 @@ public class UserDaoImp extends BaseDaoImp<User>  implements UserDao {
         return (List<User>) getHibernateTemplate().findByCriteria(criteria);
     }
 
-
+    public List<User> findUserByPage(int pageNo, int pageSize){
+        String hql = "from User";
+        return findByPage(hql, pageNo, pageSize);
+    }
 }
