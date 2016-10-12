@@ -23,13 +23,13 @@ function getjson(i) {
                         "</div>" +
                     "<div class='comment-head '>" +
                         "<div class='row'>" +
-                            "<div class='comment-name '>" +
+                            "<div class='comment-name col-sm-3'>" +
                                 "用户名：" + data[i].name +
                             "</div>" +
-                            "<div class='comment-date col-sm-offset-1'>" +
+                            "<div class='comment-date col-sm-3 col-sm-offset-1'>" +
                                 "时间：" + data[i].date +
                             "</div>" +
-                            "<div class='comment-ip col-sm-offset-1'>" +
+                            "<div class='comment-ip col-sm-3 col-sm-offset-1'>" +
                                 "IP：" + data[i].ip +
                             "</div>" +
                         "</div>" +

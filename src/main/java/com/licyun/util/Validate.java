@@ -72,6 +72,26 @@ public class Validate {
         }
     }
 
+    //登录验证
+    public void adminLoginValidate(User user, Errors errors){
+        commonValidate(user, errors);
+        User sqlUser = userService.findByEmail(user.getEmail());
+        if(sqlUser != null){
+            if(sqlUser.getPasswd().equals(user.getPasswd())){
+                if(sqlUser.getType() == 2){
+
+                }else{
+                    errors.rejectValue("email", "useremail.notexist");
+                }
+
+            }else{
+                errors.rejectValue("passwd", "userpasswd.error");
+            }
+        }else{
+            errors.rejectValue("email", "useremail.notexist");
+        }
+    }
+
     //修改验证
     public void updateValidate(User user, int id, Errors errors){
         commonValidate(user, errors);

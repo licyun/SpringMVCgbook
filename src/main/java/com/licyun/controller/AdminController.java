@@ -65,7 +65,7 @@ public class AdminController {
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
         //验证
-        validate.loginValidate(user, result);
+        validate.adminLoginValidate(user, result);
         if(result.hasErrors()){
             return "admin/login";
         }
