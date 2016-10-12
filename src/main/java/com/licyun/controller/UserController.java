@@ -187,7 +187,7 @@ public class UserController {
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
          public String edit(@PathVariable int id, Model model){
         User user = userService.findById(id);
-        model.addAttribute("user/user", user);
+        model.addAttribute("user", user);
         return "user/edit";
     }
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
