@@ -1,0 +1,47 @@
+.allcomment{
+
+}
+.submit-top{
+    margin-top: 15px;
+}
+.comment{
+    border-bottom: 1px solid rgba(0,0,0,0.13);
+    margin: 20px 0 20px 0;
+}
+.comment-img{
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+.comment-head{
+
+}
+.comment-name, .comment-date, .comment-ip{
+    float: left;
+}
+.comment-body{
+
+}
+.comment-footer{
+
+}
+.user-left{
+    width: 100px;
+    float: left;
+}
+.user-left-down{
+    width: 100px;
+    margin-top: 20px;
+}
+.user-right{
+    width: 200px;
+    margin-left: 30px;
+    float: left;
+}
+.user-right-row{
+    width: 300px;
+    height: 30px;
+}
+.clear{
+    clear:both;
+}

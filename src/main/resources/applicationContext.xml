@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    " default-lazy-init="false">
+
+    <!-- 扫描要注入的包 -->
+    <context:component-scan base-package="com.licyun.model"/>
+    <context:component-scan base-package="com.licyun.service"/>
+    <context:component-scan base-package="com.licyun.dao"/>
+    <context:component-scan base-package="com.licyun.util"/>
+
+    <!-- 配置conponent-scan后可取消-->
+    <context:annotation-config/>
+
+    <!--propeties文件的配置-->
+    <context:property-placeholder location="classpath:database.properties" />
+
+    <!-- 使用C3P0数据源，MySQL数据库 -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <!-- MySQL5 -->
+        <property name="driverClass" value="${database.driverClass}"></property>
+        <property name="jdbcUrl" value="${database.jdbcUrl}"></property>
+        <property name="user" value="${database.user}"></property>
+        <property name="password" value="${database.password}"></property>
+        <property name="maxPoolSize" value="40"></property>
+        <property name="minPoolSize" value="1"></property>
+        <property name="initialPoolSize" value="1"></property>
+        <property name="maxIdleTime" value="20"></property>
+    </bean>
+    <!-- session工厂 -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="com.licyun.model" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+                <prop key="hibernate.connection.autocommit">true</prop>
+                <!--&lt;!&ndash; 如果开启, Hibernate将在SQL中生成有助于调试的注释信息, 默认值为false. 取值 true | false &ndash;&gt;-->
+                <!--<prop key="hibernate.use_sql_comments">false</prop>-->
+                <!--&lt;!&ndash; Fetch Size 是设定JDBC的Statement读取数据的时候每次从数据库中取出的记录条数。 &ndash;&gt;-->
+                <!--<prop key="hibernate.jdbc.fetch_size">50</prop>-->
+                <!--&lt;!&ndash; Batch Size是设定对数据库进行批量删除，批量更新和批量插入的时候的批次大小 &ndash;&gt;-->
+                <!--<prop key="hibernate.jdbc.batch_size">25</prop>-->
+                <!--&lt;!&ndash; 允许使用外连接抓取.取值. true | false &ndash;&gt;-->
+                <!--<prop key="hibernate.use_outer_join">true</prop>-->
+                <!--&lt;!&ndash; 外连接抓取树的最大深度,建议在0到3之间 &ndash;&gt;-->
+                <!--<prop key="hibernate.max_fetch_depth">1</prop>-->
+                <!--&lt;!&ndash; 强制Hibernate按照被更新数据的主键，为SQL更新排序。这么做将减少在高并发系统中事务的死锁。 取值 true | false  &ndash;&gt;-->
+                <!--<prop key="hibernate.order_updates">true</prop>-->
+                <!--&lt;!&ndash; 如果开启, Hibernate将收集有助于性能调节的统计数据.取值true|false &ndash;&gt;-->
+                <!--<prop key="hibernate.generate_statistics">false</prop>-->
+                <!-- 自动连接 -->
+                <!--<prop key="hibernate.autoReconnect">${hibernate.autoReconnect}</prop>-->
+
+            </props>
+        </property>
+    </bean>
+
+    <!-- 开启HibernateTemplate，并且为其注入SessionFactory
+  使用HibernateTemplate不太方便的就是要获取session得通过getSessionFactory()方法获取 -->
+    <bean id="hibernateTemplate" class="org.springframework.orm.hibernate4.HibernateTemplate">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <!--<property name="checkWriteOperations" value="false"></property>-->
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!-- 事务采用声明方式 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <!-- 若不用上面的声明方式，可采用下面的方式 -->
+    <!--&lt;!&ndash; 基本事务定义，使用transactionManager做事务管理，默认get*，find*方法的事务为read-only &ndash;&gt;-->
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="find*" read-only="true"/>-->
+            <!--<tx:method name="get*" read-only="true"/>-->
+            <!--<tx:method name="add*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="update*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="delete*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="save*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="*" propagation="REQUIRED" />-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--&lt;!&ndash; 配置aop， spring是通过aop来进行事务管理的 &ndash;&gt;-->
+    <!--<aop:config>-->
+        <!--&lt;!&ndash; 设置pointCut表示那些方法要加入事务处理 &ndash;&gt;-->
+        <!--&lt;!&ndash; 以下的事务是声明在dao中的，但是通常都会在service来处理多个业务对象逻辑的关系，注入删除，更新等，此时如果在执行了一个步骤之后抛出异常-->
+              <!--就会导致数据不完整，所以事务不应该在dao层处理，而应在service，这也是spring所提供的一个非常方便的工具，声明式事务&ndash;&gt;-->
+        <!--<aop:pointcut id="interceptorPointCuts"-->
+                      <!--expression="execution(* com.licyun.service.*.*(..))"/>-->
+        <!--&lt;!&ndash; 通过advisor来确定具体要加入事务控制的方法 &ndash;&gt;-->
+        <!--<aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts"/>-->
+    <!--</aop:config>-->
+</beans>
