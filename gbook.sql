@@ -59,8 +59,8 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(11) DEFAULT NULL,
-  `name` char(20) DEFAULT NULL,
-  `email` char(20) DEFAULT NULL,
+  `name` char(200) DEFAULT NULL,
+  `email` char(200) DEFAULT NULL,
   `passwd` char(200) DEFAULT NULL,
   `imgurl` char(200) DEFAULT NULL,
   PRIMARY KEY (`id`),
