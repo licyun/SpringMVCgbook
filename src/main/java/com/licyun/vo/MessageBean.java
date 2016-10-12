@@ -7,6 +7,7 @@ package com.licyun.vo;
  */
 public class MessageBean {
     private String email;
+
     private String message;
 
     public String getEmail() {

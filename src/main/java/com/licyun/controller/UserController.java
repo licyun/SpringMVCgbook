@@ -46,7 +46,12 @@ public class UserController {
     @Autowired
     private MessageService messageService;
 
-    //首页提交留言
+    /**
+     * 查看留言
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = {"/", "index"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String index(Model model, HttpSession session){
         List<MessageJsonBean> list = messageService.findAllMessage();
@@ -65,6 +70,18 @@ public class UserController {
         model.addAttribute("ifLogin", false);
         return "index";
     }
+
+    /**
+     * 提交留言
+     * @param message   前台传递的留言数据
+     * @param result
+     * @param model
+     * @param session
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
     @RequestMapping(value = {"/", "/index"}, method = {RequestMethod.POST})
     public String index(@Valid Message message,BindingResult result, Model model,
                         HttpSession session, HttpServletRequest request,
@@ -88,7 +105,11 @@ public class UserController {
         return "index";
     }
 
-    //根据页面返回对应的json数组
+    /**
+     * 根据页面返回对应的json数组
+     * @param page 第几页
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/messageJson-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public List<MessageJsonBean> json(@PathVariable int page){
@@ -96,7 +117,12 @@ public class UserController {
         return list;
     }
 
-    //用户首页
+    /**
+     * 用户首页
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = {"/user"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String userIndex(HttpSession session, Model model){
         User sessionUser = (User)session.getAttribute("user");
@@ -108,7 +134,13 @@ public class UserController {
         return "user/index";
     }
 
-    //查看用户评论
+    /**
+     * 查看用户自身评论
+     * @param session
+     * @param model
+     * @param page  第几页
+     * @return
+     */
     @RequestMapping(value = "/user/message-{page}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String message(HttpSession session, Model model, @PathVariable int page){
         User user = (User)session.getAttribute("user");
@@ -119,7 +151,13 @@ public class UserController {
         return "user/message";
     }
 
-    //删除用户评论
+    /**
+     * 删除用户评论
+     * @param session
+     * @param model
+     * @param mid   留言id
+     * @return
+     */
     @RequestMapping(value = "/user/deleteMessage-{mid}", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String deleteMessage(HttpSession session, Model model,
                                 @PathVariable int mid){
@@ -130,12 +168,24 @@ public class UserController {
         return "user/message-1";
     }
 
-    //注册
+    /**
+     * 用户注册 get
+     * @param model
+     * @return
+     */
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public String register(Model model){
         model.addAttribute(new User());
         return "user/register";
     }
+
+    /**
+     * 用户注册 POSt
+     * @param user  modelAttribute传递的user
+     * @param result
+     * @param session
+     * @return
+     */
     @RequestMapping(value = {"/user/register"}, method = {RequestMethod.POST, RequestMethod.HEAD})
     public String register(@Valid  User user,BindingResult result,
                            HttpSession session){
@@ -149,7 +199,12 @@ public class UserController {
         return "user/index";
     }
 
-    //登录
+    /**
+     * 用户登录 get
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/user/login", method = {RequestMethod.GET, RequestMethod.HEAD})
     public String login(Model model, HttpSession session){
         //判断session
@@ -161,6 +216,15 @@ public class UserController {
         model.addAttribute("user", new User());
         return "user/login";
     }
+
+    /**
+     * 用户登录POST
+     * @param user  获取前台表单传递的User对象
+     * @param result
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/user/login", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String login(@Valid User user, BindingResult result,
                         HttpSession session, Model model){
@@ -174,7 +238,13 @@ public class UserController {
         return "user/index";
     }
 
-    //退出登录
+    /**
+     * 退出登录
+     * @param session
+     * @param response
+     * @param request
+     * @throws Exception
+     */
     @RequestMapping(value = "/user/loginout", method = {RequestMethod.GET, RequestMethod.HEAD})
     public void loginOut(HttpSession session, HttpServletResponse response,
                          HttpServletRequest request) throws Exception{
@@ -183,13 +253,26 @@ public class UserController {
         response.sendRedirect(request.getContextPath() +"/user/login");
     }
 
-    //编辑
+    /**
+     * 编辑用户信息 get
+     * @param id    用户id
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.GET, RequestMethod.HEAD})
-         public String edit(@PathVariable int id, Model model){
+    public String edit(@PathVariable int id, Model model){
         User user = userService.findById(id);
         model.addAttribute("user", user);
         return "user/edit";
     }
+
+    /**
+     * 编辑用户信息 提交post
+     * @param user  用户对象
+     * @param id    用户id
+     * @param result
+     * @return
+     */
     @RequestMapping(value = "/user/edit-{id}", method = {RequestMethod.POST, RequestMethod.HEAD})
     public String edit(@Valid User user,@Valid int id, BindingResult result){
         validate.updateValidate(user, id, result);
@@ -204,13 +287,27 @@ public class UserController {
         return "user/index";
     }
 
-    // 修改图片
+    /**
+     * 修改图片 get
+     * @param session
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/user/edit-img", method = RequestMethod.GET)
     public String uploadOneFileHandler(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
         model.addAttribute("user", user);
         return "user/editimg";
     }
+
+    /**
+     * 修改图片 post
+     * @param request
+     * @param session
+     * @param file    图片文件
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/user/edit-img", method = RequestMethod.POST)
     public String uploadFileHandler(HttpServletRequest request, HttpSession session,
                                     @RequestParam("file") MultipartFile file, Model model) {

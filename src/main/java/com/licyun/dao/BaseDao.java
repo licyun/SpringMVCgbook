@@ -2,7 +2,11 @@ package com.licyun.dao;
 
 import java.util.List;
 
-
+/**
+ * Created by 李呈云
+ * Description:
+ * 2016/9/26.
+ */
 
 public interface BaseDao<T>{
     public void save(T entity);

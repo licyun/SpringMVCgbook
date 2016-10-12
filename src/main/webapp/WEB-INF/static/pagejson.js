@@ -2,20 +2,22 @@ $(function() {
     getjson(1);
 });
 
+//用ajax获取分页json数据 i 为第几页
 function getjson(i) {
     $.ajax( {
         type : "get",
         url : "messageJson-"+i,
         dataType:"json",
         success : function(jsondata) {
-
             $("#comments").empty();
-            var data=eval(jsondata);
-            var length = data.length;
+            var data=eval(jsondata);    //解析json
+            var length = data.length;   //json对象数
             for(var i =0; i < length; i++){
+                //img不存在时调用默认图片
                 var imgUrl;
                 if(data[i].imgUrl == null)
                     data[i].imgUrl = "nopic.jpg";
+                //循环添加div
                 var html =
                     "<div class='comment col-sm-offset-1'>" +
                         "<div class='comment-img'>" +
@@ -43,5 +45,6 @@ function getjson(i) {
             }
         }
     });
+    //记录当前页，为上一页和下一页做准备
     currentpage = i;
 }

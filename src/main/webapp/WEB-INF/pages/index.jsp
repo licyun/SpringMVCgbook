@@ -81,6 +81,7 @@
         getjson(currentpage);
     }
 </script>
+<!-- 获取json分页的js -->
 <script src="${pageContext.request.contextPath}/static/pagejson.js"></script>
 </body>
 </html>

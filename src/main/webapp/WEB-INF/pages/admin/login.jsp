@@ -30,7 +30,7 @@
             <div class="form-group">
                 <label class="col-sm-offset-2 col-sm-2 control-label">密码</label>
                 <div class="col-sm-4">
-                    <form:input path="passwd" class="form-control"/>
+                    <form:password path="passwd" class="form-control"/>
                     <form:errors path="passwd"/>
                 </div>
             </div>
