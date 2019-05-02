@@ -21,7 +21,7 @@ function getjson(i) {
                 var html =
                     "<div class='comment col-sm-offset-1'>" +
                         "<div class='comment-img'>" +
-                            "<img src='upload/"+data[i].imgUrl+"' width='30' height='30'>" +
+                            "<img src='upload/"+data[i].imgUrl+"' onerror='this.src=\"upload/nopic.jpg\"' width='30' height='30'>" +
                         "</div>" +
                     "<div class='comment-head '>" +
                         "<div class='row'>" +
